@@ -1,0 +1,85 @@
+<app-header 
+  [isLoggedIn]="isLoggedIn"
+  [showMenuButton]="false">
+</app-header>
+
+<ion-content [fullscreen]="true" class="imagen-fondo">
+  <div id="container">
+    <img class="img-logo" src="assets/logo.png" alt="Logo"/>
+
+    <ion-button (click)="goToMenu()" class="custom-img-btn" fill="clear">
+      <img src="assets/MENU BUTTON.png" />
+    </ion-button>
+    
+    <ion-button (click)="goToOrder()" class="custom-img-btn" fill="clear">
+      <img src="assets/ORDER NOW.png" />
+    </ion-button>
+
+    <ion-card mode="ios">
+      <ion-card-header color="light">
+        <ion-card-title class="title-card">Order from delivery apps</ion-card-title>
+      </ion-card-header>
+      <ion-card-content class="content-transparent">
+        <ion-button (click)="goPageExt()" fill="clear">
+          <img src="assets/UBEREAST LOGO.png" />
+        </ion-button>
+        <ion-button (click)="goPageExt()" fill="clear">
+          <img src="assets/DOORDASH LOGO.png" />
+        </ion-button>
+        <ion-button (click)="goPageExt()" fill="clear">
+          <img src="assets/GRUBHUB LOGO.png" />
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+
+
+    <swiper-container 
+      class="my-swiper" 
+      pagination="true" 
+      autoplay-delay="2500" 
+      autoplay-disable-on-interaction="false"
+      loop="true">
+    
+    <swiper-slide>
+      <img src="assets/PLATO 1.png" />
+    </swiper-slide>
+    
+    <swiper-slide>
+      <img src="assets/PLATO 2.png" />
+    </swiper-slide>
+    
+    <swiper-slide>
+      <img src="assets/PLATO 3.png" />
+    </swiper-slide>
+    
+    <swiper-slide>
+      <img src="assets/PLATO 4.png" />
+    </swiper-slide>
+
+  </swiper-container>
+
+
+
+
+    <ion-card class="card-phone"> 
+      <ion-card-content>
+        <img src="assets/Phone icon.svg" alt="Phone Icon">
+        <div class="info">
+          201-338.4980<br />
+          201-374.2466
+        </div>
+      </ion-card-content>
+    </ion-card>
+    
+    <ion-card class="card-address">
+      <ion-card-content>
+        <img src="assets/LOCATION ICON.svg" alt="Phone Icon">
+        <div class="info">
+          86 S WASHINGTON AVE,<br />
+          BERGENFIELD, NJ, 07621
+        </div>
+      </ion-card-content>
+    </ion-card>
+   
+  </div>
+</ion-content>

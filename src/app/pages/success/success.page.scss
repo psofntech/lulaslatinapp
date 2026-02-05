@@ -1,0 +1,97 @@
+// --- Contenedor SuccessPage ---
+.success-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.success-card {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  text-align: center;
+  padding: 30px;
+  margin-top: 50px;
+
+  .icon-wrapper {
+    font-size: 5rem;
+    color: var(--app-success-color, #1d8004);
+    margin-bottom: 20px;
+    opacity: 0;          // inicia invisible
+    transform: scale(0); // inicia pequeño
+    animation: popCheck 0.8s forwards; // animación
+  }
+
+  h2.animate-text,
+  p.animate-text {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.8s forwards;
+  }
+
+  h2.animate-text {
+    animation-delay: 0.5s; // aparece después del check
+  }
+
+  p.animate-text {
+    animation-delay: 0.7s;
+  }
+
+  ion-button {
+    --background: var(--app-success-color, #1d8004);
+    --color: #fff;
+    font-weight: 600;
+    margin-top: 20px;
+  }
+}
+
+// --- Keyframes ---
+@keyframes popCheck {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.icon-wrapper {
+  font-size: 5rem;
+  color: var(--app-success-color, #1d8004);
+  margin-bottom: 20px;
+  opacity: 0;          // empieza invisible
+  transform: scale(0); // empieza pequeño
+  animation: popCheck 0.8s forwards; // forwards mantiene el estado final
+}
+
+@keyframes popCheck {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+  100% {
+    opacity: 1;       // 🔹 aseguramos que permanezca visible
+    transform: scale(1); // 🔹 tamaño final
+  }
+}

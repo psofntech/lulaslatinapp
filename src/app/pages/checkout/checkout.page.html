@@ -1,0 +1,201 @@
+<!-- HEADER COMPATIBLE -->
+<app-header
+  [isLoggedIn]="isLoggedIn"
+  [showMenuButton]="false">
+</app-header>
+
+<ion-content class="cart-content fondo-ivory">
+  
+  <div class="cart-container">
+
+
+    <ion-card>
+      <ion-card-content class="cart-content">
+
+        <!-- BACK BUTTON (Estilizado) -->
+        <div class="cart-back" (click)="goBack()">
+          <ion-icon name="arrow-back-outline"></ion-icon>
+          <span>Back</span>
+        </div>
+
+
+        <div class="content-log">
+          <ion-icon src="assets/VISA.svg"></ion-icon>
+          <ion-icon src="assets/MASTERCARD.svg"></ion-icon>
+          <ion-icon src="assets/AMERICAN EXPRESS.svg"></ion-icon>
+        </div>
+
+
+        <div class="card-header-row">
+          <p class="">ENTER PAYMENTS DETAILS</p>
+        </div>
+        
+        <ion-card class="info-card card-warning">
+          <ion-card-content>
+            <div class="card-header-row">
+              <p class="section-title">⚠️ Important Information</p>
+            </div>
+            <p>Please note: Orders cancelled more than <strong>10 minutes</strong> after placement are <strong>non-refundable</strong>. Make sure all details are correct before proceeding.</p>
+          </ion-card-content>
+        </ion-card>
+
+        <ion-card class="info-card summary">
+          <ion-card-content>
+            <div class="card-header-row">
+              <div class="icon-wrapper user-icon-bg">
+                <ion-icon name="receipt-outline"></ion-icon>
+              </div>
+              <p class="section-title">Order Summary</p>
+            </div>
+
+            <ion-list lines="full" >
+              @for (item of cartItems; track item.id) {
+                <ion-item class="list-silver">
+                  <ion-label>
+                    {{ item.quantity }}x {{ item.name }}
+                    <span class="item-price">
+                      (${{ item.price * item.quantity | number:'1.2-2' }})
+                    </span>
+                  </ion-label>
+                </ion-item>
+              }
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+        
+        <ion-card class="info-card">
+          
+          <!-- Header de la tarjeta con Icono de Usuario -->
+          @if (selectType === 'delivery') {
+            <div class="card-header-row">
+              <div class="icon-wrapper user-icon-bg">
+                <ion-icon name="car-outline"></ion-icon>
+              </div>
+              <p class="section-title">Delivery Information</p>
+            </div>
+          } @else {
+            <div class="card-header-row">
+              <div class="icon-wrapper user-icon-bg">
+                <ion-icon name="home-outline"></ion-icon>
+              </div>
+              <p class="section-title">Pick Up Information</p>
+            </div>
+          }
+
+          <!-- Detalles Cliente -->
+          <div class="card-details-group">
+            <div class="detail-row">
+              <span class="detail-label">Name:</span>
+              <span class="detail-value">{{ currentUser?.name }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Phone:</span>
+              <span class="detail-value">{{ currentUser?.phone }}</span>
+            </div>
+          </div>
+
+          <!-- Dirección Dinámica del Cliente -->
+          @if (selectType === 'delivery' && selectedAddress) {
+            <div class="address-highlight">
+              <span class="detail-label">Delivery Address:</span>
+              <p class="address-text">{{ selectedAddress.street }}</p>
+              <p class="address-text">{{ selectedAddress.city }}, {{ selectedAddress.state }} {{ selectedAddress.zip }}</p>
+            </div>
+          } @else if (selectType === 'delivery' && !selectedAddress) {
+            <p class="loading-text">Selecting address...</p>
+          } @else {
+             <p class="empty-address">---</p>
+          }
+        </ion-card>
+
+        <ion-card class="info-card">
+          <ion-card-content>
+            <div class="card-header-row">
+              <div class="icon-wrapper user-icon-bg">
+                <ion-icon name="card-outline"></ion-icon>
+              </div>
+              <p class="section-title">Payment Breakdown</p>
+            </div>
+
+            <div class="card-details-group">
+            <div class="detail-row">
+              <span class="detail-label">Subtotal:</span>
+              <span class="detail-amount">${{ subtotal }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">tax:</span>
+              <span class="detail-amount">${{ tax }}</span>
+            </div>
+            @if(tipAmount){
+              <div class="detail-row">
+                <span class="detail-label">Tip(15%):</span>
+                <span class="detail-amount">${{ tipAmount }}</span>
+              </div>
+            }
+            <hr>
+            <div class="detail-row">
+              <span class="label-total">Total:</span>
+              <span class="amount-total">${{ total | number:'1.2-2' }}</span>
+            </div>
+          </div>
+
+          </ion-card-content>
+        </ion-card>
+
+        <div class="payment-form">
+
+          <ion-item lines="none" class="card-input card-number">
+            <ion-icon
+              name="card-outline"
+              slot="start"
+              class="card-icon">
+            </ion-icon> 
+
+            <ion-input
+              type="tel"
+              inputmode="numeric"
+              maxlength="19"
+              placeholder="Número de tarjeta"
+              [(ngModel)]="card.number"
+              name="cardNumber"
+              (ionInput)="formatCardNumber($event)">
+            </ion-input>
+          </ion-item>
+
+          <div class="card-row">
+            <ion-item lines="none" class="card-input small">
+              <ion-input
+                type="tel"
+                maxlength="5"
+                placeholder="MM/AA"
+                [(ngModel)]="card.exp"
+                name="cardExp">
+              </ion-input>
+            </ion-item>
+
+            <ion-item lines="none" class="card-input small">
+              <ion-input
+                type="tel"
+                maxlength="4"
+                placeholder="CVV"
+                [(ngModel)]="card.cvv"
+                name="cardCvv">
+              </ion-input>
+            </ion-item>
+          </div>
+
+        </div>
+
+
+
+        <ion-button
+          class="pay-now-btn"
+          (click)="processPaid()"
+          expand="block">
+          PAY NOW
+        </ion-button>
+
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

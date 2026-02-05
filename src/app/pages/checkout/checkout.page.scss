@@ -1,0 +1,327 @@
+// --- FONDO GENERAL ---
+.fondo-ivory {
+  --background: var(--fondo-ivory, #fffff0);
+}
+
+.cart-container {
+  padding-bottom: 80px; // Espacio para que el footer no tape contenido
+}
+
+.content-log {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+    height: auto;
+    margin-bottom: 20px;
+    
+    ion-icon {
+        width: 80px;
+        height: 80px;
+    }
+}
+
+
+// --- BOTÓN BACK ---
+.cart-back {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  color: #444;
+  cursor: pointer;
+  padding-bottom: 15px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #f0f0f0;
+
+  ion-icon {
+    font-size: 1.4rem;
+    color: var(--app-secondary-color);
+  }
+}
+
+// --- BASE TARJETAS DE INFORMACIÓN ---
+.info-card {
+  margin: 0 0 16px 0;
+  border-radius: 12px; // Bordes más redondeados y modernos
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); // Sombra suave
+  padding: 20px; // Aire interno
+  position: relative;
+  overflow: visible;
+
+  // Variante Silver (Dirección Empresa)
+  &.card-silver {
+    background: #f5f5f7; // Fondo gris muy claro
+    border: 1px solid #e1e1e1;
+    text-align: center;
+  }
+
+  &.card-warning{
+    background-color: var(--fondo-ivory);
+    border: 1px solid #ffc409;
+    border-left: 0.5rem solid #ffc409;
+    color: var(--app-secondary-color);
+    text-align: justify;
+  }
+
+  &.center-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &.summ    ary{
+    background: #f5f5f7; // Fondo gris muy claro
+    border: 1px solid #e1e1e1;
+    padding: 0px;
+  }
+}
+
+.list-silver{
+    background: #f5f5f7;
+}
+
+// --- CONTENEDORES DE ICONOS (Estética "App Store") ---
+.card-icon-wrapper {
+  margin-bottom: 12px;
+  
+  // Fondo circular para el logo
+  &.brand-icon {
+    width: 120px;
+    height: 120px;
+    background: #000;
+    border-radius: 50%; // Círculo perfecto
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    
+    .card-logo {
+      width: 100px;
+      height: 100px;
+      object-fit: contain;
+    }
+  }
+}
+
+.card-header-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.icon-wrapper {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  // Icono de usuario en color secundario
+  &.user-icon-bg {
+    background-color: rgba(223, 83, 83, 0.1); // Rojo/Secundario suave
+    color: var(--app-secondary-color);
+    ion-icon {
+      font-size: 1.5rem;
+    }
+  }
+}
+
+.edit-section {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+// --- TIPOGRAFÍA Y DETALLES ---
+
+.section-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #333;
+  margin: 0;
+}
+
+.card-info-text {
+  width: 100%;
+  text-align: center;
+}
+
+.card-label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #888;
+  margin: 0 0 5px 0;
+}
+
+.card-main-text {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.card-sub-text {
+  font-size: 0.9rem;
+  color: #555;
+  margin: 2px 0 0 0;
+}
+
+// --- SECCIÓN DETALLES DEL CLIENTE ---
+.card-details-group {
+  margin-bottom: 16px;
+
+  .detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+  }
+
+  .detail-label {
+    color: #777;
+    font-weight: 500;
+}
+
+.detail-value {
+    color: #333;
+    font-weight: 600;
+    text-align: right;
+}
+
+.detail-amount{
+    color: #777;
+    font-weight: 500;
+    
+}
+
+  .label-total{
+    color: #1d8004;
+    font-weight: 800;
+    text-align: right;
+    font-size: 1.2rem;
+  }
+
+  .amount-total{
+    color: #1d8004;
+    font-weight: 800;
+    text-align: right;
+    font-size: 1.2rem;
+  }
+}
+
+.address-highlight {
+  background-color: #fff5f0; // Un fondo muy sutil naranja/crema
+  border-left: 3px solid var(--app-orange); // Borde lateral acento
+  padding: 10px;
+  border-radius: 4px;
+  margin-top: 10px;
+
+  .detail-label {
+    font-size: 0.8rem;
+    color: var(--app-secondary-color);
+    font-weight: 700;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .address-text {
+    margin: 2px 0;
+    font-size: 0.95rem;
+    color: #444;
+  }
+}
+
+.loading-text, .empty-address {
+  color: #bbb;
+  font-style: italic;
+  font-size: 0.9rem;
+  margin-top: 10px;
+}
+
+// --- SEGMENTO (Estilo Píldora/Pill) ---
+.segment-wrapper {
+  margin: 20px 0;
+
+  ion-segment.pill-segment {
+    --background: #f0f0f0;
+    border-radius: 30px;
+    padding: 4px;
+
+    ion-segment-button {
+      --indicator-color: #fff;
+      --indicator-height: 0px;
+      --background-hover: transparent;
+      --border-radius: 24px;
+
+      &.segment-checked {
+        --background: var(--app-orange);
+        --color: #fff;
+        ion-label {
+          font-weight: 600;
+        }
+      }
+
+      ion-label {
+        color: #777;
+      }
+    }
+  }
+}
+
+.payment-form {
+  margin: 20px 0;
+}
+
+.card-input {
+  --background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 6px 12px;
+  margin-bottom: 12px;
+
+  ion-input {
+    font-size: 1rem;
+    color: #333;
+  }
+}
+
+.card-row {
+  display: flex;
+  gap: 12px;
+
+  .small {
+    flex: 1;
+  }
+}
+
+.card-number {
+  display: flex;
+  align-items: center;
+
+  .card-icon {
+    font-size: 1.4rem;
+    color: #999;
+    margin-right: 8px;
+  }
+}
+
+.pay-now-btn {
+  --background: #1d8004;
+  --background-hover: #176a03;
+  --background-activated: #145a02;
+  --color: #fff;
+
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: 0.5px;
+  margin-top: 20px;
+  height: 52px;
+
+  box-shadow: 0 6px 14px rgba(29, 128, 4, 0.35);
+}

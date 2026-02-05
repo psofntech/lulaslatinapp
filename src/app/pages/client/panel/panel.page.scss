@@ -1,0 +1,70 @@
+.panel-dashboard {
+  padding: 16px;
+
+  ion-card {
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    margin-bottom: 16px;
+  }
+
+  /* Resumen de pedidos */
+  .card-summary {
+    background-color: #007bff; // azul como en la captura
+    color: #fff;
+    text-align: center;
+    padding: 24px;
+
+    .summary-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+    }
+
+    .summary-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .summary-count {
+      font-size: 2rem;
+      font-weight: 700;
+      margin: 4px 0;
+    }
+
+    .summary-subtitle {
+      font-size: 0.9rem;
+      opacity: 0.85;
+      margin: 0;
+    }
+  }
+
+  /* Métodos de envío */
+  .card-methods {
+    ion-card-title {
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: 8px;
+    }
+
+    ion-item {
+      border-radius: 8px;
+      margin-bottom: 6px;
+      background: #f7f7f7;
+    }
+  }
+
+  /* Historial de pedidos */
+  .card-history {
+    ion-card-title {
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: 8px;
+    }
+
+    .no-orders {
+      text-align: center;
+      color: #888;
+      font-style: italic;
+    }
+  }
+}

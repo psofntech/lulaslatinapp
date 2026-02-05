@@ -1,0 +1,27 @@
+<ion-content>
+  <ion-list lines="none">
+
+    @if (isLoggedIn) {
+      <ion-item button (click)="go('/dashboard')" dismiss>
+        <ion-icon slot="start" name="person-circle-outline"></ion-icon>
+        <ion-label>Mi Panel</ion-label>
+      </ion-item>
+
+      <ion-item button (click)="logout()" dismiss>
+        <ion-icon slot="start" name="log-out-outline"></ion-icon>
+        <ion-label>Cerrar Sesión</ion-label>
+      </ion-item>
+    } @else {
+      <ion-item button (click)="go('/login')" dismiss>
+        <ion-icon slot="start" name="log-in-outline"></ion-icon>
+        <ion-label>Iniciar Sesión</ion-label>
+      </ion-item>
+
+      <ion-item button (click)="go('/register')" dismiss>
+        <ion-icon slot="start" name="person-add-outline"></ion-icon>
+        <ion-label>Registrarse</ion-label>
+      </ion-item>
+    }
+
+  </ion-list>
+</ion-content>

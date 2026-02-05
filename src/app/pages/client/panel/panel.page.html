@@ -1,0 +1,61 @@
+<ion-content class="panel-dashboard">
+
+  <!-- Resumen de pedidos -->
+  <ion-card class="card-summary">
+    <ion-card-content>
+      <div class="summary-icon">
+        <ion-icon name="cart-outline"></ion-icon>
+      </div>
+      <div class="summary-text">
+        <p class="summary-title">Your Orders</p>
+        <p class="summary-count">{{ totalOrders }}</p>
+        <p class="summary-subtitle">Orders you've placed</p>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Métodos de envío más usados -->
+  <ion-card class="card-methods">
+    <ion-card-header>
+      <ion-card-title>Most Used Shipping Methods</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list lines="none">
+        @for (method of mostUsedShipping; track method.name) {
+          <ion-item>
+            <ion-label>
+              {{ method.name }} - {{ method.count }} {{ method.count === 1 ? 'time' : 'times' }}
+            </ion-label>
+          </ion-item>
+        }
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Historial de pedidos -->
+  <ion-card class="card-history">
+    <ion-card-header>
+      <ion-card-title>Your Order History</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      
+      
+      @if(orderHistory.length > 0){
+        <ion-list lines="full">
+          @for (item of orderHistory; track item.id) {
+            <ion-item>
+              <ion-label>
+                Order #{{ item.id }} - {{ item.date | date:'shortDate' }}
+              </ion-label>
+            </ion-item>
+          }
+        </ion-list>
+      } @else {
+        <p class="no-orders">
+          You have no orders yet.
+        </p>
+      }
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>

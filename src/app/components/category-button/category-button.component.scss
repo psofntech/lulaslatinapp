@@ -1,0 +1,13 @@
+.icon-wrapper {
+  height: 40px; /* Altura fija para mantener alineación */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1px;
+}
+
+.category-img {
+  width: 32px;  /* Ajusta esto para que coincida visualmente con size="large" */
+  height: 32px;
+  object-fit: contain; /* Asegura que la imagen no se deforme */
+}

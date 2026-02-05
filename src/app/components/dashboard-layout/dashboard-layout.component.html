@@ -1,0 +1,84 @@
+<ion-app>
+  <!-- Menú lateral -->
+ <ion-menu contentId="main-content" side="start" menuId="main-menu">
+    <ion-header>
+      <ion-toolbar color="dark">
+        <div class="menu-header" (click)="goHome()">
+          <img src="assets/logo.png" alt="Logo" class="menu-logo" />
+          <span class="app-name">Lulas Latin Cuisine</span>
+
+          @if (currentUser) {
+            <div class="user-info">
+              <span class="user-name">{{ currentUser.name }}</span>
+              <span class="user-email">{{ currentUser.email }}</span>
+            </div>
+          }
+        </div>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content class="ion-padding">
+      <ion-list lines="none">
+        <ion-menu-toggle auto-hide="true">
+          <ion-item
+            button
+            class="menu-item"
+            [class.active]="activeRoute === 'dashboard'"
+            (click)="goToDash()">
+            
+            <ion-icon slot="start" name="home-outline"></ion-icon>
+            <span>Dashboard</span>
+          </ion-item>
+        </ion-menu-toggle>
+        
+        <ion-menu-toggle auto-hide="true">
+          <ion-item
+            button
+            class="menu-item"
+            [class.active]="activeRoute === 'my-orders'"
+            (click)="navigateTo('my-orders')">
+            
+            <ion-icon slot="start" name="list-outline"></ion-icon>
+            <span>Orders</span>
+          </ion-item>
+        </ion-menu-toggle>
+
+        <ion-menu-toggle auto-hide="true">
+          <ion-item
+            button
+            class="menu-item"
+            [class.active]="activeRoute === 'profile'"
+            (click)="navigateTo('profile')">
+            
+            <ion-icon slot="start" name="person-outline"></ion-icon>
+            <span>Profile</span>
+          </ion-item>
+        </ion-menu-toggle>
+
+      </ion-list>
+
+      <div class="logout-container">
+        <ion-item button (click)="logout()" class="menu-item logout-item">
+          <ion-icon slot="start" name="log-out-outline"></ion-icon>
+          <span>Logout</span>
+        </ion-item>
+      </div>
+    </ion-content>
+  </ion-menu>
+
+  <!-- Main content siempre presente -->
+  <div class="ion-page" id="main-content">
+    <ion-header>
+      <ion-toolbar color="dark">
+        <ion-buttons slot="start">
+          <ion-menu-button menu="main-menu"></ion-menu-button>
+        </ion-buttons>
+        <ion-title>{{ pageTitle }}</ion-title>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content class="ion-padding">
+      <router-outlet></router-outlet>
+    </ion-content>
+  </div>
+</ion-app>

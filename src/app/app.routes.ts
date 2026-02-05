@@ -1,0 +1,76 @@
+import { Routes } from '@angular/router';
+import { AuthGuard } from './guards/auth-guard';
+import { DashboardLayoutComponent } from './components/dashboard-layout/dashboard-layout.component';
+
+export const routes: Routes = [
+  {
+    path: 'home',
+    loadComponent: () => import('./pages/home/home.page').then((m) => m.HomePage),
+  },
+  {
+    path: '',
+    redirectTo: 'home',
+    pathMatch: 'full',
+  },
+  {
+    path: 'menu',
+    loadComponent: () => import('./pages/menu/menu.page').then( m => m.MenuPage)
+  },
+  {
+    path: 'products',
+    loadComponent: () => import('./pages/products/products.page').then( m => m.ProductsPage)
+  },
+  {
+    path: 'cart',
+    loadComponent: () => import('./pages/cart/cart.page').then( m => m.CartPage),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'checkout',
+    loadComponent: () => import('./pages/checkout/checkout.page').then( m => m.CheckoutPage),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'login',
+    loadComponent: () => import('./pages/auth/login/login.page').then( m => m.LoginPage)
+  },
+  {
+    path: 'register',
+    loadComponent: () => import('./pages/auth/register/register.page').then( m => m.RegisterPage)
+  },
+  {
+    path: 'admin/panel',
+    loadComponent: () => import('./pages/admin/panel/panel.page').then( m => m.PanelPage),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'reset-password',
+    loadComponent: () => import('./pages/auth/reset-password/reset-password.page').then( m => m.ResetPasswordPage)
+  },
+  {
+    path: 'success',
+    loadComponent: () => import('./pages/success/success.page').then( m => m.SuccessPage),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'dashboard',
+    component: DashboardLayoutComponent,
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./pages/client/panel/panel.page').then( m => m.PanelPage),
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'my-orders',
+        loadComponent: () => import('./pages/client/my-orders/my-orders.page').then( m => m.MyOrdersPage),
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'profile',
+        loadComponent: () => import('./pages/client/profile/profile.page').then( m => m.ProfilePage),
+        canActivate: [AuthGuard]
+      },
+    ],
+  },
+];

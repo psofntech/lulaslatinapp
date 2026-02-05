@@ -1,0 +1,76 @@
+<app-header 
+  [isLoggedIn]="isLoggedIn" 
+  [showMenuButton]="false">
+</app-header>
+
+<ion-content [fullscreen]="true" class="fondo-ivory">
+  
+  <!-- Card del Nombre de Categoría con Botones de Vista -->
+  <div class="ion-text-center ion-padding-top">
+    <ion-card class="category-title-card ion-align-items-center category-name">
+      <ion-card-content class="card-content-row">
+        <!-- Nombre Categoría -->
+        <div class="title-text">
+          {{ getCategoryName(selectedCategory) }}
+        </div>
+        
+        <!-- Toggle Grid / List -->
+        <div class="view-toggle">
+          <ion-icon 
+            name="grid-outline" 
+            [class.active]="viewMode === 'grid'" 
+            (click)="viewMode = 'grid'">
+          </ion-icon>
+          <ion-icon 
+            name="list-outline" 
+            [class.active]="viewMode === 'list'" 
+            (click)="viewMode = 'list'">
+          </ion-icon>
+        </div>
+      </ion-card-content>
+    </ion-card> 
+  </div>
+
+  <!-- Segment Scrollable generado con @for -->
+  <!-- mode="md" con los CSS de abajo forzará el color naranja -->
+  <ion-segment 
+    [scrollable]="true" 
+    [(ngModel)]="selectedCategory"
+    mode="md"
+    (ionChange)="onSegmentChange()">
+    
+    @for (category of categories; track category.categoryId) {
+      <ion-segment-button [value]="category.categoryId">
+        <ion-icon [src]="'assets/menu-category/' + category.iconName"></ion-icon>
+      </ion-segment-button>
+    }
+  </ion-segment>
+
+  <!-- Lista de Productos Filtrados -->
+  <!-- Aquí cambiamos la clase dinámicamente según viewMode -->
+  <div [ngClass]="viewMode === 'grid' ? 'products-grid' : 'products-list'">
+    @for (item of filteredProducts; track item.id) {
+      <ion-card class="product-card" button>
+        <img [src]="item.image" class="card-image" />
+        <h3 class="product-name">{{ item.name }}</h3>
+        
+        <div class="card-footer">
+          <!-- Botón Precio (Naranja Oscuro) -->
+          <ion-button class="price-btn" size="small" (click)="openModal($event, item)">
+            ${{ item.price }}
+          </ion-button>
+          
+          <!-- Botón ADD (Naranja Claro) -->
+          <ion-button class="add-btn" size="small" (click)="openModal($event, item)">
+            ADD
+          </ion-button>
+        </div>
+      </ion-card>
+    } @empty {
+      <div class="ion-text-center ion-padding">
+        <p>No hay productos en esta categoría.</p>
+      </div>
+    }
+  </div>
+
+</ion-content>

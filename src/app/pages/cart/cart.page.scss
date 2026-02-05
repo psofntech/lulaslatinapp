@@ -1,0 +1,395 @@
+.fondo-ivory {
+  --background: var(--fondo-ivory);
+}
+.cart-content {
+  padding: 8px;
+}
+
+.cart-back {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  color: #444;
+  cursor: pointer;
+  padding-bottom: 15px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #f0f0f0;
+
+  ion-icon {
+    font-size: 1.4rem;
+    color: var(--app-secondary-color);
+  }
+}
+
+.info-card {
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.center-card {
+  text-align: center;
+}
+
+.card-silver {
+    background-color: lightgray;
+}
+
+.card-logo {
+  width: 120px;
+  margin-bottom: 8px;
+}
+
+.info-card {
+  animation: fadeIn 200ms ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.section-title {
+  color: var(--app-secondary-color);
+  font-weight: 700;
+}
+
+.shipping-info {
+  margin: 16px 0;
+}
+
+.delivery-text {
+  color: var(--app-secondary-color);
+  font-weight: 600;
+}
+
+.segment-wrapper {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+.pill-segment {
+  width: 80%;
+  --background: #f1f1f1;
+  border-radius: 40px;
+  padding: 4px;
+  --indicator-height: 100%;
+}
+
+.pill-segment ion-segment-button {
+  --color: #000;
+  font-weight: 500;
+}
+
+.pill-segment ion-segment-button.segment-button-checked {
+  --color: #fff;
+    border-radius: 40px;
+}
+
+/* 🔥 INDICADOR iOS */
+.pill-segment::part(indicator) {
+  background: #ce1526;
+  border-radius: 40px;
+}
+
+.pill-segment {
+  --indicator-color: #ce1526;
+  --color-checked: #fff;
+}
+
+.segment-hint{
+    text-align: center;
+    font-size: small;
+    margin-top: 8px;
+    margin-bottom: 24px;
+}
+
+.items-card {
+  padding: 12px;
+}
+
+.items-header,
+.item-row,
+.item-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.item-row {
+  margin: 8px 0;
+}
+
+.price-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.edit-btn {
+  --background: #ff9800;
+  color: #fff;
+}
+
+.delete-btn {
+  --background: #f44336;
+  color: #fff;
+}
+
+.tip-input {
+  margin: 16px 0;
+  --border-color: var(--app-secondary-color);
+  color: var(--app-secondary-color);
+}
+
+.tip-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.skip-btn {
+  margin: 16px 0;
+  --background: #ff9800;
+}
+
+.summary-card {
+  padding: 12px;
+}
+
+.summary-card div {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.summary-total {
+  font-weight: bold;
+}
+
+.next-btn {
+  --background: var(--app-orange);
+  --color: #fff;
+  font-weight: bold;
+  height: 50px;
+  
+  // 1. Forzar opacidad total para que se vea "Full Color"
+  opacity: 1 !important;
+  
+  // 2. Opcional: Sombra para mejorar el efecto visual de botón activo
+  box-shadow: 0 2px 4px rgba(247, 151, 16, 0.4); 
+}
+
+// ESTADO DESHABILITADO (Cuando [disabled]="true")
+// Ionic añade la clase '.button-disabled' automáticamente
+.next-btn.button-disabled {
+  --background: #cccccc; // Color gris cuando está apagado
+  --color: #999999;     // Texto gris
+  opacity: 0.5;         // Opacidad reducida para indicar deshabilitado
+  box-shadow: none;      // Sin sombra
+}
+
+.cart-footer {
+  text-align: center;
+  font-size: 11px;
+  padding: 16px 0;
+}
+
+.items-card {
+  padding: 0;
+  overflow: hidden;
+}
+
+/* GRID BASE (header + rows) */
+.table-row {
+  display: grid;
+  /* 
+     DEFINIMOS ANCHOS FIJOS:
+     1. Item: 220px (Espacio suficiente para el nombre)
+     2. Unit Price: 100px (Espacio suficiente para el precio)
+     3. Actions: 120px (Espacio para los dos botones)
+  */
+  grid-template-columns: 180px 70px 100px; 
+  
+  align-items: center;
+  /* (Opcional) Asegura que la tabla respete el ancho definido */
+  width: 100%;
+}
+
+/* HEADER */
+.table-header {
+  background: #f2f2f2;
+  font-weight: 600;
+  border-bottom: 1px solid #ddd;
+}
+
+.table-header div {
+  padding: 12px;
+  border-right: 1px solid #ddd;
+}
+
+.table-header div:last-child {
+  border-right: none;
+}
+
+/* BODY ROWS */
+.table-row:not(.table-header):not(.table-total) {
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.table-row > div {
+  padding: 12px;
+  border-right: 1px solid #e0e0e0;
+}
+
+.table-row > div:last-child {
+  border-right: none;
+}
+
+/* ESTILOS PARA EL TEXTO DEL ITEM */
+.item-name {
+  white-space: nowrap; 
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ACTIONS */
+.actions-col {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+
+.edit-btn {
+  --background: #ff9800;
+  --color: #fff;
+}
+
+.delete-btn {
+  --background: #f44336;
+  --color: #fff;
+}
+
+/* TOTAL */
+.table-total {
+  background: #fafafa;
+  font-weight: 700;
+}
+
+/* --- GRID DE PROPINAS --- */
+.tip-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+/* Estilo General para Botones Reales */
+.tip-btn {
+  height: 70px;
+  --border-color: #333;
+  color: #333;
+  margin: 0;
+  --box-shadow: none;
+}
+
+/* Estilo para el Wrapper de Custom (Div que simula botón) */
+.custom-btn-wrapper {
+  height: 70px;
+  border: 1px solid #333;
+  border-radius: 4px; /* Borde redondeado estándar */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  background-color: transparent;
+  transition: all 0.2s;
+  
+  /* Asegurar alineación interna */
+  width: 100%;
+  padding: 0 5px; /* Pequeño padding interno */
+}
+
+/* --- ESTADO ACTIVO (Para ambos) --- */
+.tip-btn.active, .custom-btn-wrapper.active {
+  --background: var(--app-orange);
+  --border-color: var(--app-orange);
+  background-color: var(--app-orange);
+  color: #fff;
+  
+  .sub-text { color: #f0f0f0; }
+}
+
+/* --- CONTENIDO INTERNO --- */
+.btn-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  line-height: 1.2;
+  gap: 4px;
+
+  span { font-size: 1rem; font-weight: 600; }
+  .sub-text { font-size: 0.8rem; font-weight: 400; }
+}
+
+/* --- INPUT INTERNO (Custom) --- */
+.internal-input {
+  --background: #ccc !important; /* Fondo transparente para que se vea el naranja del botón */
+  --color: #222 !important;             /* Texto blanco */
+  --padding-start: 0;
+  --padding-end: 0;
+  --placeholder-color: rgba(255, 255, 255, 0.7);
+  
+  text-align: center;
+  width: 50%;
+  height: 80%;
+  font-size: 1rem;
+  font-weight: 400;
+  
+  /* Eliminar bordes por defecto del input */
+  border: none;
+  outline: none;
+}
+
+/* Icono de limpiar del input (opcional, para que no se vea feo sobre naranja) */
+.internal-input .input-clear-icon {
+    color: #fff;
+}
+
+.alert-input-centered {
+  text-align: center !important;
+}
+
+// ... tus estilos anteriores ...
+
+.btn-content.column-layout {
+  display: flex;
+  flex-direction: column; // Apilar Label (arriba) e Input (abajo)
+  gap: 2px;
+  width: 100%;
+}
+
+.small-label {
+  font-size: 0.7rem; // Texto "Custom" pequeño
+  font-weight: 600;
+  color: #f0f0f0; // Blanco ligeramente gris
+}
+
+.internal-input {
+  --background: transparent !important; 
+  --color: #fff !important;
+  --padding-start: 0;
+  --padding-end: 0;
+  --placeholder-color: rgba(255, 255, 255, 0.7);
+  
+  text-align: center;
+  width: 100%;
+  font-size: 1rem; // Tamaño del input
+  font-weight: 600;
+  border: none;
+  outline: none;
+  height: auto; // Autoajustar altura
+  margin: 0;
+}

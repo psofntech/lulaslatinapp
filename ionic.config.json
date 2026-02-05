@@ -1,0 +1,7 @@
+{
+  "name": "latinCusineApp",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

@@ -1,0 +1,51 @@
+<ion-header>
+  <ion-toolbar color="dark">
+
+    <!-- Logo -->
+    <ion-buttons slot="start">
+      @if(showMenuButton){
+        <ion-menu-button menu="start"></ion-menu-button>
+      }
+      <ion-button (click)="goHome()" fill="clear">
+        <img src="assets/logo.png" alt="Logo" class="app-logo"/>
+      </ion-button>
+    </ion-buttons>
+
+    <!-- Acciones -->
+    <ion-buttons slot="end">
+
+      <!-- Cart -->
+      <ion-button (click)="onCartClick()" class="cart-button">
+        <ion-badge
+          *ngIf="cartCount > 0"
+          color="danger"
+          mode="ios"
+          class="cart-badge"
+        >
+          {{ cartCount }}
+        </ion-badge>
+        <ion-icon slot="icon-only" name="cart-outline"></ion-icon>
+      </ion-button>
+
+      <!-- User trigger -->
+      <ion-button (click)="openPopover($event)">
+        <ion-icon slot="icon-only" name="person-outline"></ion-icon>
+      </ion-button>
+
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<!-- ✅ POPOVER DECLARATIVO -->
+<ion-popover
+  [event]="popoverEvent"
+  [isOpen]="showPopover" 
+  (didDismiss)="onPopoverDismiss()"
+  side="bottom"
+  alignment="end"
+  show-arrow="false"
+>
+  <ng-template>
+    <app-user-popover [isLoggedIn]="isLoggedIn"></app-user-popover>
+  </ng-template>
+</ion-popover>

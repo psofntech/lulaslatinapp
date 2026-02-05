@@ -1,0 +1,29 @@
+.app-logo {
+  height: 40px;
+  width: auto;
+  margin-left: 10px;
+}
+
+.cart-button {
+  position: relative;
+  width: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cart-badge {
+  position: absolute;
+  left: -10px;        // izquierda del icono
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 10px;
+  min-width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+

@@ -1,0 +1,117 @@
+<!-- HEADER -->
+<ion-header>
+  <ion-toolbar color="dark" class="auth-header">
+    <div class="header-content" (click)="goToHome()">
+      <img src="assets/logo.png" alt="Lulas Latin Cuisine" />
+      <h1>Lulas Latin Cuisine</h1>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<!-- CONTENIDO -->
+<ion-content class="auth-content" [fullscreen]="true" keyboard-attach>
+
+  <div class="auth-container">
+
+    <h2>Create your account</h2>
+
+    <ion-text color="danger" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </ion-text>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+
+      <!-- Full Name -->
+      <ion-item fill="outline">
+        <ion-label position="stacked">Full Name</ion-label>
+        <ion-input formControlName="name" placeholder="Enter your full name"></ion-input>
+      </ion-item>
+
+      @if (submitted && f['name'].errors) {
+        <ion-text color="danger">
+          @if (f['name'].errors['required']) { <small>Name is required</small> }
+          @if (f['name'].errors['minlength']) { <small>Minimum 3 characters</small> }
+        </ion-text>
+      }
+
+      <!-- Email -->
+      <ion-item fill="outline">
+        <ion-label position="stacked">E-Mail Address</ion-label>
+        <ion-input type="email" formControlName="email" placeholder="Enter your email"></ion-input>
+      </ion-item>
+
+      @if (submitted && f['email'].errors) {
+        <ion-text color="danger">
+          @if (f['email'].errors['required']) { <small>Email is required</small> }
+          @if (f['email'].errors['email']) { <small>Enter a valid email</small> }
+        </ion-text>
+      }
+      
+      <!-- Email -->
+      <ion-item fill="outline">
+        <ion-label position="stacked">Phone</ion-label>
+        <ion-input type="phone" formControlName="phone" placeholder="Enter your phone"></ion-input>
+      </ion-item>
+
+      @if (submitted && f['phone'].errors) {
+        <ion-text color="danger">
+          @if (f['phone'].errors['required']) { <small>Phone is required</small> }
+        </ion-text>
+      }
+
+      <!-- Password -->
+      <ion-item fill="outline">
+        <ion-label position="stacked">Password</ion-label>
+        <ion-input type="password" formControlName="password" placeholder="Enter your password">
+          <ion-input-password-toggle slot="end" color="medium"></ion-input-password-toggle>
+        </ion-input>
+      </ion-item>
+
+      @if (submitted && f['password'].errors) {
+        <ion-text color="danger">
+          @if (f['password'].errors['required']) { <small>Password is required</small> }
+          @if (f['password'].errors['minlength']) { <small>Minimum 6 characters</small> }
+        </ion-text>
+      }
+
+      <!-- Confirm Password -->
+      <ion-item fill="outline">
+        <ion-label position="stacked">Confirm Password</ion-label>
+        <ion-input type="password" formControlName="confirmPassword" placeholder="Confirm your password">
+          <ion-input-password-toggle slot="end" color="medium"></ion-input-password-toggle>
+        </ion-input>
+      </ion-item>
+
+      @if (submitted && (f['confirmPassword'].errors || registerForm.errors)) {
+        <ion-text color="danger">
+          @if (f['confirmPassword'].errors && f['confirmPassword'].errors['required']) { 
+            <small>Confirm password is required</small> 
+          }
+          @if (registerForm.errors && registerForm.errors['mismatch']) { 
+            <small>Passwords do not match</small> 
+          }
+        </ion-text>
+      }
+
+      <!-- Submit Button -->
+      <ion-button expand="block" color="light" type="submit">
+        Create Account
+      </ion-button>
+
+    </form>
+
+
+
+    <div class="auth-links">
+      <ion-text>
+        Already have an account?
+        <ion-router-link routerLink="/login">
+          Sign in.
+        </ion-router-link>
+      </ion-text>
+    </div>
+
+
+  </div>
+
+</ion-content>

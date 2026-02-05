@@ -1,0 +1,20 @@
+<ion-card (click)="goToCategory()" button="true">
+  <ion-card-content class="ion-text-center">
+    <div class="icon-wrapper">
+      @if (isImage(iconName)) {
+        <img 
+          [src]="iconName" 
+          class="category-img" 
+          alt="Icono" />
+      } @else {
+        <ion-icon 
+          [src]="iconName" 
+          size="large">
+        </ion-icon>
+      }
+      
+    </div>
+    <br>
+    <ion-label>{{ label }}</ion-label>
+  </ion-card-content>
+</ion-card>

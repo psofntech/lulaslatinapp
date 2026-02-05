@@ -1,0 +1,194 @@
+.fondo-ivory {
+  --background: var(--fondo-ivory);
+}
+
+/* --- 1. Estilos de la Card de Categoría y Toggle --- */
+.category-title-card {
+  margin: 0 20px 10px 20px;
+  box-shadow: none;
+  border: 1px solid #eee;
+}
+
+.card-content-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title-text {
+  font-weight: bold;
+  font-size: 1rem;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.view-toggle {
+  display: flex;
+  gap: 10px;
+
+  ion-icon {
+    font-size: 1.5rem;
+    color: #fff;
+    cursor: pointer;
+    transition: color 0.3s;
+  }
+
+  ion-icon.active {
+    color: var(--app-secondary-color);
+  }
+}
+
+/* --- 2. Segmento --- */
+ion-segment {
+  --background: transparent;
+}
+
+ion-segment-button {
+  --color: #666;
+  --color-checked: var(--app-orange);
+  --indicator-color: var(--app-orange);
+}
+
+ion-segment::part(scroll) {
+  scrollbar-width: none; /* Firefox */
+}
+
+ion-segment::part(scroll)::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
+/* ==================================================================
+   3. ESTILOS COMPARTIDOS (Garantiza que se vean igual en Grid y List)
+   ================================================================== */
+
+.products-grid, .products-list {
+  padding: 15px;
+  gap: 15px; // Espacio entre tarjetas
+  
+  // Estilo común de la tarjeta
+  .product-card {
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    padding: 10px;
+  }
+
+  // Estilo común del Botón de PRECIO (Usa Secondary)
+  .price-btn {
+    --background: var(--app-secondary-color) !important;
+    color: #fff;
+    font-weight: bold;
+    height: 35px;
+    --padding-start: 10px;
+    --padding-end: 10px;
+    border-radius: 4px;
+  }
+
+  // Estilo común del Botón ADD (Usa Orange)
+  .add-btn {
+    --background: var(--app-orange) !important;
+    --color: #fff;
+    font-weight: bold;
+    height: 35px;
+    --padding-start: 10px;
+    --padding-end: 10px;
+    border-radius: 4px;
+  }
+
+  // Estilo común del NOMBRE (Usa Secondary)
+  .product-name {
+    color: var(--app-secondary-color);
+    font-weight: 600;
+    font-size: 1rem;
+    margin: 5px 0;
+  }
+}
+
+/* ==================================================================
+   4. LAYOUT ESPECÍFICO GRID (Columnas)
+   ================================================================== */
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+
+  .product-card {
+    margin: 0;
+    display: flex;
+    flex-direction: column; // Vertical
+    align-items: center;
+    text-align: center;
+    height: 100%;
+  }
+
+  .card-image {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    padding-top: 10px;
+  }
+
+  .product-name {
+    // Truncar texto en grid para alineación
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .card-footer {
+    width: 100%;
+    display: flex;
+    justify-content: space-between; // Separados horizontalmente
+    margin-top: auto;
+    padding: 10px 0 0 0;
+  }
+}
+
+/* ==================================================================
+   5. LAYOUT ESPECÍFICO LIST (Filas)
+   ================================================================== */
+
+.products-list {
+  display: flex;
+  flex-direction: column; // Tarjetas apiladas
+
+  .product-card {
+    margin: 0;
+    display: flex;
+    flex-direction: row; // Contenido horizontal
+    align-items: center;
+    text-align: left;
+    height: auto;
+  }
+
+  .card-image {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 8px;
+    padding: 0;
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  // Contenedor del nombre en lista
+  .product-name {
+    flex: 1; // Ocupa el espacio disponible
+    white-space: normal; // Permitir múltiples líneas
+    align-self: flex-start; // Alinear arriba si el texto es corto
+  }
+
+  .card-footer {
+    display: flex;
+    justify-content: space-between; // Separados horizontalmente
+    margin-top: auto;
+    padding: 10px 0 0 0;
+  }
+}
+
+
+.category-name{
+    --background: var(--app-orange);
+    font-weight: bold;
+    color: #fff;
+    font-size: 1.5rem;
+}

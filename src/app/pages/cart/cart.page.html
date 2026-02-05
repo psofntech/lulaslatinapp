@@ -1,0 +1,254 @@
+<app-header
+  [isLoggedIn]="isLoggedIn"
+  [showMenuButton]="false">
+</app-header>
+
+<ion-content class="cart-content fondo-ivory">
+
+  <ion-card>
+    <ion-card-content class="cart-content">
+
+      <!-- BACK -->
+      <div class="cart-back" (click)="goBack()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+        <span>Back</span>
+      </div>
+    
+      <!-- ADDRESS EMPRESA -->
+      @if (selectType === 'delivery') {
+        <ion-card class="info-card center-card card-silver">
+          <img src="assets/logo.png" class="card-logo" />
+          <p class="card-title">Address:</p>
+          <p>86 S Washington Ave</p>
+          <p>Bergenfield, NJ 07621</p>
+        </ion-card>
+    
+        <!-- CUSTOMER -->
+        <ion-card class="info-card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <p class="section-title" style="margin: 0;">Customer</p>
+            @if (selectType === 'delivery') {
+              <ion-button fill="clear" size="small" (click)="changeAddress()">
+                <ion-icon name="create-outline"></ion-icon>
+              </ion-button>
+            }
+          </div>
+
+          <p><strong>Name:</strong> {{ currentUser?.name }}</p>
+          <p><strong>Phone:</strong> {{ currentUser?.phone }}</p>
+
+          @if (selectType === 'delivery' && selectedAddress) {
+            <p><strong>Address 1:</strong> {{ selectedAddress.street }}</p>
+            <p><strong>Address 2:</strong></p> 
+            <p>
+              <strong>City:</strong> {{ selectedAddress.city }}
+              <strong>State:</strong> {{ selectedAddress.state }}
+              <strong>ZIP:</strong> {{ selectedAddress.zip }}
+            </p>
+          } @else if (selectType === 'delivery' && !selectedAddress) {
+            <p><strong>Address:</strong> <span style="color: #999;">Seleccionando dirección...</span></p>
+          } @else {
+            <p><strong>Address:</strong> ---</p>
+          }
+        </ion-card>
+      }
+    
+      <!-- SHIPPING INFO -->
+      <div class="shipping-info">
+        <p><strong>Exp delivery:</strong></p>
+        <p>
+          <strong>Shipping method:</strong>
+          <span class="delivery-text">{{ selectType | titlecase }}</span>
+        </p>
+      </div>
+    
+      <!-- SEGMENT -->
+      <div class="segment-wrapper">
+        <ion-segment
+          [(ngModel)]="selectType"
+          (ionChange)="onSegmentChange($event)"
+          mode="ios"
+          class="pill-segment"
+          color="warning"
+        >
+          <ion-segment-button value="pickup">
+            <ion-label>Pick Up</ion-label>
+          </ion-segment-button>
+  
+          <ion-segment-button value="delivery">
+            <ion-label>Delivery</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+      </div>
+    
+      <p class="segment-hint">
+        Switch to toggle between Delivery and Pick Up
+      </p>
+    
+      <!-- ITEMS TABLE -->
+      <ion-card class="items-card">
+        <div class="table-row table-header">
+          <div>Item</div>
+          <div>Price</div>
+          <div class="actions-col"></div>
+        </div>
+
+        @for (item of cartItems; track item.id) {
+          <div class="table-row">
+            <div class="item-name">
+              <strong>{{ item.name }}</strong>
+              @if (item.notes) {
+                <small class="note-text">({{ item.notes }})</small>
+              }
+            </div>
+
+            <div class="item-price">
+              ${{ item.price * item.quantity }}
+              <small class="qty-badge">x{{ item.quantity }}</small>
+            </div>
+
+            <div class="actions-col">
+              <ion-button size="small" class="edit-btn" (click)="editItem(item)">
+                <ion-icon name="create-outline"></ion-icon>
+              </ion-button>
+
+              <ion-button
+                size="small"
+                class="delete-btn"
+                (click)="removeItem(item)">
+                <ion-icon name="trash-outline"></ion-icon>
+              </ion-button>
+            </div>
+          </div>
+        }
+
+        <div class="table-row table-total">
+          <div><strong>Sub total</strong></div>
+          <div><strong>${{ subtotal.toFixed(2) }}</strong></div>
+          <div></div>
+        </div>
+      </ion-card>
+    
+      <ion-button expand="block" fill="outline" class="tip-input">
+        Enter Tip (Custom)
+      </ion-button>
+    
+      <!-- GRID DE PROPINAS -->
+      <div class="tip-grid">
+        
+        <!-- 15% -->
+        <ion-button 
+          fill="outline" 
+          class="tip-btn" 
+          [class.active]="selectedTipType === '15'"
+          (click)="selectTip('15')">
+          <div class="btn-content">
+            <span>15%</span>
+            <span class="sub-text">${{ (subtotal * 0.15).toFixed(2) }}</span>
+          </div>
+        </ion-button>
+
+        <!-- 18% -->
+        <ion-button 
+          fill="outline" 
+          class="tip-btn" 
+          [class.active]="selectedTipType === '18'"
+          (click)="selectTip('18')">
+          <div class="btn-content">
+            <span>18%</span>
+            <span class="sub-text">${{ (subtotal * 0.18).toFixed(2) }}</span>
+          </div>
+        </ion-button>
+
+        <!-- 20% -->
+        <ion-button 
+          fill="outline" 
+          class="tip-btn" 
+          [class.active]="selectedTipType === '20'"
+          (click)="selectTip('20')">
+          <div class="btn-content">
+            <span>20%</span>
+            <span class="sub-text">${{ (subtotal * 0.20).toFixed(2) }}</span>
+          </div>
+        </ion-button>
+
+        <!-- CUSTOM -->
+        <div 
+          class="tip-btn custom-btn-wrapper" 
+          [class.active]="selectedTipType === 'custom'"
+          (click)="selectTip('custom')">
+          
+          @if (selectedTipType !== 'custom') {
+            <!-- Estado normal -->
+            <div class="btn-content">
+              <span>Custom</span>
+              <span class="sub-text">$</span>
+            </div>
+          } @else {
+            <!-- Estado Activo: Label + Input -->
+            <div class="btn-content column-layout">
+              <span class="small-label">Custom</span>
+              <ion-input 
+                type="number" 
+                class="internal-input"
+                placeholder="0"
+                [value]="customTipAmount"
+                (ionInput)="onCustomInputChange($event)"
+                #customInputRef
+                (click)="$event.stopPropagation()">
+              </ion-input>
+            </div>
+          }
+        </div>
+      </div>
+
+      <ion-button 
+        expand="block" 
+        class="skip-btn"
+        [disabled]="isSkipDisabled"
+        (click)="onSkip()">
+        SKIP
+      </ion-button>
+    
+      <!-- SUMMARY -->
+      <ion-card class="summary-card">
+        <div class="summary-row">
+          <span>Sub total:</span>
+          <span>${{ subtotal.toFixed(2) }}</span>
+        </div>
+        <div class="summary-row">
+          <span>Delivery fee:</span>
+          <span>${{ deliveryFee.toFixed(2) }}</span>
+        </div>
+        <div class="summary-row">
+          <span>NJ TAX (07621):</span>
+          <span>${{ taxAmount.toFixed(2) }}</span>
+        </div>
+        <div class="summary-row">
+          <span>Tip (%):</span>
+          <span>${{ calculatedTip.toFixed(2) }}</span>
+        </div>
+        
+        <div class="summary-row summary-total">
+          <span>Total:</span>
+          <span>${{ totalPrice.toFixed(2) }}</span>
+        </div>
+      </ion-card>
+    
+      <!-- BOTON NEXT -->
+      <ion-button 
+        expand="block" 
+        class="next-btn"
+        [disabled]="!canProceed"
+        (click)="goToCheckout()">
+        NEXT
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+
+
+  <footer class="cart-footer">
+    COPYRIGHT (C) 2026 | LULAS LATIN CUISINE | DESIGN BY PSOFNTECH
+  </footer>
+
+</ion-content>

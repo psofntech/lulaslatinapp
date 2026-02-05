@@ -1,0 +1,83 @@
+<ion-content class="profile-content">
+
+  <!-- Personal Information Card -->
+  <ion-card class="mb-2">
+    <ion-card-header class="card-header-gray">
+      <ion-card-title>Personal Information</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-label position="stacked">Name</ion-label>
+        <ion-input [(ngModel)]="currentUser.name"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Email</ion-label>
+        <ion-input [(ngModel)]="currentUser.email" type="email"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Phone</ion-label>
+        <ion-input [(ngModel)]="currentUser.phone" type="tel"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">New Password</ion-label>
+        <ion-input [(ngModel)]="newPassword" type="password"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Confirm Password</ion-label>
+        <ion-input [(ngModel)]="confirmPassword" type="password"></ion-input>
+      </ion-item>
+
+      <ion-button expand="block" color="light" class="save-btn" (click)="saveChanges()">Save Changes</ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Address Card -->
+  <ion-card>
+    <ion-card-header class="card-header-gray">
+      <ion-card-title>Address</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-grid>
+       @for(address of addresses; track address.id) {
+        <ion-col size="12" size-md="6">
+          <ion-card class="address-card" (click)="editAddress(address)">
+            
+            <!-- Icono favorito en esquina superior derecha -->
+            @if(address.isFavorite){
+              <ion-icon name="star-outline" color="warning" class="favorite-icon"></ion-icon>
+            }
+
+            <!-- Contenido centrado -->
+            <ion-card-content class="address-content">
+              <div class="map-icon-wrapper">
+                <ion-icon name="map-outline"></ion-icon>
+              </div>
+              <span class="address-text">{{ address.street }}</span>
+            </ion-card-content>
+
+          </ion-card>
+        </ion-col>
+      }
+
+        <!-- Add new address -->
+        <ion-row>
+          <ion-col size="12" size-md="6">
+            <ion-col size="12" size-md="6">
+              <ion-card class="add-address-card" (click)="addAddress()">
+                <ion-card-content class="add-address-content">
+                  <ion-icon name="add-outline"></ion-icon>
+                  <span>Add Address</span>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>

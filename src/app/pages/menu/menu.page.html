@@ -1,0 +1,37 @@
+<app-header 
+  [isLoggedIn]="isLoggedIn" 
+  [showMenuButton]="false">
+</app-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large" class="ion-text-center">
+        <ion-icon slot="icon-only" src="assets/menu.svg"></ion-icon>
+        MENU
+      </ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <h1 size="large" class="ion-text-center">
+    <ion-icon slot="icon-only" src="assets/menu.svg"></ion-icon>
+    MENU
+  </h1>
+
+  <ion-card>
+    <ion-card-content>
+        @for (category of categories; track category.categoryId) {
+        
+        <app-category-button 
+          [label]="category.lavel" 
+          [iconName]="'assets/menu-category/' + category.iconName" 
+          [categoryId]="category.categoryId">
+        </app-category-button>
+
+      } @empty {
+        <p>No hay categorías disponibles.</p>
+      }
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>
