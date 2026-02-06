@@ -1,9 +1,8 @@
 <ion-header>
   <ion-toolbar color="dark">
     <ion-title>Detalle Producto</ion-title>
-    <!-- El botón X rojo de arriba sigue sirviendo, pero pondremos otro abajo -->
     <ion-buttons slot="end">
-      <ion-button (click)="closeModal()">
+      <ion-button (click)="cancel()">
         <ion-icon name="close"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -11,66 +10,57 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <!-- Agregamos padding con la clase modal-content -->
-  <div class="modal-content">
-    
-    <!-- Imagen y Nombre -->
-    <div class="modal-header-info">
-      <img [src]="product.image" alt="{{ product.name }}" />
-      <h2>{{ product.name }}</h2>
-      <p class="price-tag">${{ product.price }}</p>
-      <p class="description">{{ product.description }}</p>
-    </div>
 
-    <!-- Controles de Cantidad (Estilo Personalizado) -->
-    <ion-label position="floating" class="quantity-label">Cantidad</ion-label>
-    <div class="quantity-wrapper">
-      <ion-button fill="clear" color="dark" class="qty-btn" (click)="decrementQuantity()">
-        <ion-icon name="remove-circle-outline"></ion-icon>
-      </ion-button>
-      
-      <ion-input 
-        type="number" 
-        class="qty-input" 
-        [(ngModel)]="quantity"
-        readonly> <!-- Readonly para forzar el uso de botones -->
-      </ion-input>
-      
-      <ion-button fill="clear" color="dark" class="qty-btn" (click)="incrementQuantity()">
-        <ion-icon name="add-circle-outline"></ion-icon>
-      </ion-button>
-    </div>
-
-    <!-- Notas con bordes redondeados -->
-    <ion-list lines="full" class="custom-list">
-      <ion-item class="rounded-item">
-        <ion-label position="floating">Notas del pedido</ion-label>
-        <ion-textarea 
-          [(ngModel)]="notes" 
-          rows="3" 
-          placeholder="Sin cebolla, picante, etc..."
-          class="rounded-textarea">
-        </ion-textarea>
-      </ion-item>
-    </ion-list>
-
+  <!-- HEADER INFO -->
+  <div class="modal-header-info">
+    <img [src]="product.image" alt="{{ product.name }}" />
+    <h2>{{ product.name }}</h2>
+    <p class="price-tag">${{ product.price }}</p>
+    <p class="description">{{ product.description }}</p>
   </div>
+
+  <!-- CANTIDAD -->
+  <ion-label class="quantity-label">Cantidad</ion-label>
+
+  <div class="quantity-wrapper">
+    <ion-button fill="clear" class="qty-btn" (click)="dec()">
+      <ion-icon name="remove-circle-outline"></ion-icon>
+    </ion-button>
+
+    <ion-input
+      class="qty-input"
+      type="number"
+      [value]="quantity"
+      readonly>
+    </ion-input>
+
+    <ion-button fill="clear" class="qty-btn" (click)="inc()">
+      <ion-icon name="add-circle-outline"></ion-icon>
+    </ion-button>
+  </div>
+
+  <!-- NOTAS -->
+  <ion-list lines="none" class="custom-list">
+    <ion-item class="rounded-item">
+      <ion-label position="floating">Notas del pedido</ion-label>
+      <ion-textarea
+        class="rounded-textarea"
+        [(ngModel)]="notes"
+        rows="3"
+        placeholder="Sin cebolla, picante, etc...">
+      </ion-textarea>
+    </ion-item>
+  </ion-list>
+
 </ion-content>
 
 <ion-footer>
   <ion-toolbar>
-    <ion-buttons slot="start">
-      <!-- Botón Cancelar -->
-      <ion-button expand="block" fill="outline" color="medium" (click)="closeModal()">
-        Cancelar
-      </ion-button>
-    </ion-buttons>
-    
-    <ion-buttons slot="end">
-      <!-- Botón Agregar (Color Naranja Personalizado) -->
-      <ion-button expand="block" class="btn-add-confirm" (click)="confirm()">
-        AGREGAR
-      </ion-button>
-    </ion-buttons>
+    <ion-button
+      expand="block"
+      class="btn-add-confirm"
+      (click)="confirm()">
+      ADD TO CART
+    </ion-button>
   </ion-toolbar>
 </ion-footer>

@@ -1,5 +1,4 @@
 <app-header 
-  [isLoggedIn]="isLoggedIn"
   [showMenuButton]="false">
 </app-header>
 
@@ -7,7 +6,7 @@
   <div id="container">
     <img class="img-logo" src="assets/logo.png" alt="Logo"/>
 
-    <ion-button (click)="goToMenu()" class="custom-img-btn" fill="clear">
+    <ion-button (click)="goPageExt('https://dev.psofntech.com/lulaslatinecom_devJsol/files/Lulas Latin Cuisine MENU FONDO NEGRO nueva 2025.pdf')" class="custom-img-btn" fill="clear">
       <img src="assets/MENU BUTTON.png" />
     </ion-button>
     
@@ -20,13 +19,13 @@
         <ion-card-title class="title-card">Order from delivery apps</ion-card-title>
       </ion-card-header>
       <ion-card-content class="content-transparent">
-        <ion-button (click)="goPageExt()" fill="clear">
+        <ion-button (click)="goPageExt('https://www.ubereats.com/store/lulas-latin-cuisine/AGlDhn57RhCBhI7EUAfsgw')" fill="clear">
           <img src="assets/UBEREAST LOGO.png" />
         </ion-button>
-        <ion-button (click)="goPageExt()" fill="clear">
+        <ion-button (click)="goPageExt('https://www.doordash.com/en-CA/es/store/lula\'s-latin-cuisine-bergenfield-104062/756643/')" fill="clear">
           <img src="assets/DOORDASH LOGO.png" />
         </ion-button>
-        <ion-button (click)="goPageExt()" fill="clear">
+        <ion-button (click)="goPageExt('https://www.grubhub.com/restaurant/lulas-latin-cuisine---bergenfield-86-s-washington-ave-bergenfield/1168914  ')" fill="clear">
           <img src="assets/GRUBHUB LOGO.png" />
         </ion-button>
       </ion-card-content>

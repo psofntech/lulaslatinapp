@@ -3,7 +3,7 @@ import { IonCard, IonCardHeader, IonCardContent, IonLabel, IonInput, IonButton, 
 import { CommonModule,} from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { addIcons } from 'ionicons';
-import { personOutline, mapOutline, addOutline, starOutline } from 'ionicons/icons';
+import { personOutline, mapOutline, addOutline, starOutline, star } from 'ionicons/icons';
 import { ToastController } from '@ionic/angular';
 import { User } from 'src/interfaces/auth.interfaces';
 import { AuthService } from 'src/app/services/auth';
@@ -48,7 +48,7 @@ export class ProfilePage implements OnInit {
     private authStorage: AuthStorageService,
     private addressService: AddressService
   ) {
-    addIcons({ personOutline, mapOutline, addOutline, starOutline });
+    addIcons({ personOutline, mapOutline, addOutline, starOutline, star });
 
       this.profileForm = this.fb.group({
         name: ['', Validators.required],
@@ -129,7 +129,7 @@ export class ProfilePage implements OnInit {
         newPassword: '',
         confirmPassword: ''
       });
-
+      this.loadAddresses();
       this.showToast('Profile updated successfully!', 'success');
     } catch {
       this.showToast('Error updating profile', 'danger');
@@ -148,7 +148,7 @@ export class ProfilePage implements OnInit {
   async addAddress() {
     const alert = await this.alertCtrl.create({
       header: 'Add Address',
-      mode: "ios",
+      
       inputs: [
         { name: 'street', type: 'text', placeholder: 'Street' },
         { name: 'city', type: 'text', placeholder: 'City' },
@@ -159,7 +159,7 @@ export class ProfilePage implements OnInit {
         { text: 'Cancel', role: 'cancel' },
         {
           text: 'Save',
-          handler: (data) => {
+          handler: async (data) => {
             if (!data.street || !data.city || !data.state || !data.zip) {
               this.showToast('All fields are required', 'danger');
               return false; // alert stays open
@@ -173,8 +173,8 @@ export class ProfilePage implements OnInit {
               zip: data.zip,
               isFavorite: false
             };
-            this.addressService.add(newAddress);
-            this.loadAddresses();
+            await this.addressService.add(newAddress);
+            await this.loadAddresses();
             this.showToast('Address added successfully', 'success');
             return true;
           }
@@ -188,7 +188,7 @@ export class ProfilePage implements OnInit {
   async editAddress(address: Address) {
     const alert = await this.alertCtrl.create({
       header: 'Edit Address',
-      mode: "ios",
+      
       inputs: [
         { name: 'street', type: 'text', placeholder: 'Street', value: address.street },
         { name: 'street2', type: 'text', placeholder: 'Street', value: address.street2 },
@@ -197,10 +197,15 @@ export class ProfilePage implements OnInit {
         { name: 'zip', type: 'text', placeholder: 'ZIP', value: address.zip },
       ],
       buttons: [
-        { text: 'Delete', role: 'destructive', handler: () => this.deleteAddress(address.id) },
+        { text: 'Delete', role: 'destructive', handler: async () => {
+            await this.deleteAddress(address.id);
+            await this.loadAddresses();
+            return true;
+          } 
+        },
         {
           text: 'Save',
-          handler: (data) => {
+          handler: async (data) => {
             if (!data.street || !data.city || !data.state || !data.zip) {
               this.showToast('All fields are required', 'danger');
               return false;
@@ -211,8 +216,8 @@ export class ProfilePage implements OnInit {
             address.state = data.state;
             address.zip = data.zip;
             this.addressService.add(address);
-            this.loadAddresses();
-            this.showToast('Address updated', 'success');
+            await this.loadAddresses();
+            await this.showToast('Address updated', 'success');
             return true;
           }
         }
@@ -221,15 +226,15 @@ export class ProfilePage implements OnInit {
     await alert.present();
   }
 
-  deleteAddress(id:string) {
-    this.addressService.remove(id);
+  async deleteAddress(id:string) {
+    await this.addressService.remove(id);
     this.showToast('Address deleted', 'warning');
   }
 
   /** Marcar una dirección como favorita */
-  toggleFavorite(address: Address) {
-    this.addressService.toggleFavorite(address.id);
-    this.loadAddresses();
+  async toggleFavorite(address: Address) {
+    await this.addressService.toggleFavorite(address.id);
+    await this.loadAddresses();
     this.showToast('Address add to favorite', 'warning');
   }
 

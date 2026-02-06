@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { IonContent, IonList, IonItem, IonIcon, IonLabel } from "@ionic/angular/standalone";
 import { CommonModule } from '@angular/common';
@@ -16,6 +16,7 @@ import { AuthService } from 'src/app/services/auth';
 export class UserPopoverComponent {
   // Recibimos el estado de login desde el padre
   @Input() isLoggedIn: boolean = false;
+  @Output() close = new EventEmitter<void>();
 
   constructor(
     private router: Router,
@@ -29,12 +30,18 @@ export class UserPopoverComponent {
     });
   }
 
-  async go(path: string) {
-    this.router.navigate([path]);
+  go(path: string) {
+    this.close.emit();
+    setTimeout(() => {
+      this.router.navigate([path]);
+    }, 0);
   }
 
-  async logout() {
-    this.auth.logout();
-    this.router.navigate(['/home']);
+  logout() {
+    this.close.emit();
+    setTimeout(() => {
+      this.auth.logout();
+      this.router.navigate(['/home']);
+    }, 0);
   }
 }

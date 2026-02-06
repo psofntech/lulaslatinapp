@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common'; 
 import { IonContent, IonCard, IonButton, IonCardContent, IonCardHeader, IonCardTitle } from '@ionic/angular/standalone';
 import { HeaderComponent } from "src/app/components/header/header.component";
+import { Browser } from '@capacitor/browser';
 
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'; 
 import { Router } from '@angular/router';
@@ -28,13 +29,16 @@ export class HomePage implements OnInit {
     this.isLoggedIn = await this.auth.isLoggedIn();
   }
 
-  goToMenu() {
-
+  async goPageExt(url: string) {
+    await Browser.open({
+      url,
+      presentationStyle: 'popover' 
+    });
   }
 
   goToOrder() {
     return this.router.navigate(['/menu'])
   }
 
-  goPageExt() {}
+
 }
