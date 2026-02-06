@@ -27,3 +27,42 @@
   justify-content: center;
 }
 
+.user-button {
+  position: relative;
+}
+
+.user-icon-wrapper {
+  position: relative;
+  display: inline-flex;
+}
+
+.online-dot {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 9px;
+  height: 9px;
+  background-color: #2ecc71; // verde online
+  border-radius: 50%;
+  border: 2px solid #111; // borde para contraste
+}
+
+.notification-button {
+  position: relative;
+}
+
+.notification-badge {
+  position: absolute;
+  top: -4px;      // 🔼 más arriba
+  right: -4px;    // ▶ más a la derecha
+  min-width: 16px;
+  height: 16px;
+  font-size: 10px;
+  padding: 0 4px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+

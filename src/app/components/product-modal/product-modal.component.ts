@@ -1,58 +1,79 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, ModalController } from '@ionic/angular';
+import {
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonButtons,
+  IonButton,
+  IonIcon,
+  IonContent,
+  IonFooter,
+  IonInput,
+  IonTextarea,
+  IonList,
+  IonItem,
+  IonLabel,
+  ModalController
+} from '@ionic/angular/standalone';
+
 import { Product } from 'src/interfaces/product.interface';
 
 import { addIcons } from 'ionicons';
-import { removeCircleOutline, addCircleOutline, close } from 'ionicons/icons'
+import { close, removeCircleOutline, addCircleOutline } from 'ionicons/icons';
 
 @Component({
+  standalone: true,
   selector: 'app-product-modal',
   templateUrl: './product-modal.component.html',
   styleUrls: ['./product-modal.component.scss'],
-  imports: [IonicModule, FormsModule]
+  imports: [
+    FormsModule,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonButtons,
+    IonButton,
+    IonIcon,
+    IonContent,
+    IonFooter,
+    IonInput,
+    IonTextarea,
+    IonItem,
+    IonLabel,
+    IonList
+  ]
 })
 export class ProductModalComponent {
 
-  @Input() product: Product = {
-    id: '',
-    name: '',
-    categoryId: '',
-    price: 0,
-    image: '',
-    description: ''
-  };
+  @Input({ required: true }) product!: Product;
 
-  quantity: number = 1;
-  notes: string = '';
+  quantity = 1;
+  notes = '';
 
-  constructor(private modalController: ModalController) {
-    addIcons({
-      removeCircleOutline,
-      addCircleOutline,
-      close
-    });
+  constructor(private modalCtrl: ModalController) {
+    addIcons({close, removeCircleOutline, addCircleOutline})
   }
 
-  closeModal() {
-    this.modalController.dismiss();
+  cancel() {
+    this.modalCtrl.dismiss(null, 'cancel');
   }
 
   confirm() {
-    this.modalController.dismiss({
-      quantity: this.quantity,
-      notes: this.notes
-    });
+    this.modalCtrl.dismiss(
+      {
+        quantity: this.quantity,
+        notes: this.notes
+      },
+      'confirm'
+    );
   }
 
-  // Funciones para los botones + y -
-  incrementQuantity() {
+  inc() {
     this.quantity++;
   }
 
-  decrementQuantity() {
-    if (this.quantity > 1) {
-      this.quantity--;
-    }
+  dec() {
+    if (this.quantity > 1) this.quantity--;
   }
 }

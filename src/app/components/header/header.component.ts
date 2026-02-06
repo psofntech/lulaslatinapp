@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { AlertController, NavController } from '@ionic/angular';
 import { Router } from '@angular/router';
 
@@ -7,9 +7,10 @@ import { IonHeader, IonToolbar, IonPopover , IonButtons, IonMenuButton, IonButto
 import { UserPopoverComponent } from '../user-popover/user-popover.component';
 
 import { addIcons } from 'ionicons';
-import { cartOutline, personOutline } from 'ionicons/icons';
+import { cartOutline, personOutline, notificationsOutline } from 'ionicons/icons';
 import { Subscription } from 'rxjs';
 import { CartService } from 'src/app/services/cart';
+import { AuthService } from 'src/app/services/auth';
 
 @Component({
   selector: 'app-header',
@@ -20,7 +21,9 @@ import { CartService } from 'src/app/services/cart';
 })
 export class HeaderComponent implements OnInit, OnDestroy {
 
-  @Input() isLoggedIn: boolean = false; 
+  @ViewChild(IonPopover) popover!: IonPopover;
+
+  isLoggedIn: boolean = false; 
   @Input() showMenuButton: boolean = false;
 
   showPopover = false;
@@ -29,19 +32,26 @@ export class HeaderComponent implements OnInit, OnDestroy {
   cartCount: number = 0;  // reactivo
   private cartSub!: Subscription;
 
+  notificationsCount: number = 0;
+
   constructor(
     private alertController: AlertController,
     private router: Router,
     private cartService: CartService,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    private authService: AuthService
   ) { 
-    addIcons({ cartOutline, personOutline });
+    addIcons({ cartOutline, personOutline, notificationsOutline });
   }
 
   ngOnInit() {
     // 🔹 Suscribirse a cambios del carrito
     this.cartSub = this.cartService.cart$.subscribe(cart => {
       this.cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+    });
+
+    const authSub = this.authService.getUser().subscribe(user => {
+      this.isLoggedIn = !!user; // true si hay usuario, false si es null
     });
   }
 
@@ -65,19 +75,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
 
     if (this.cartCount === 0) {
-      // 🚨 Alert cuando el carrito está vacío
       const alert = await this.alertController.create({
         header: 'Carrito vacío',
         message: 'Debes agregar productos al carrito para acceder a esta opción.',
-        buttons: [
-          {
-            text: 'Aceptar',
-            handler: () => this.router.navigate(['/menu'])
-          }
-        ],
-        mode: 'ios'
+        buttons: ['Aceptar'],
+        backdropDismiss: false
       });
+
       await alert.present();
+      await alert.onDidDismiss();
+
+      this.router.navigate(['/menu']);
       return;
     }
 
@@ -90,12 +98,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.showPopover = true;
   }
 
-  onPopoverDismiss() {
+  async onPopoverDismiss() {
+    await this.popover.dismiss();
     this.showPopover = false;
+    this.popoverEvent = undefined;  
   }
 
   goHome(){
     this.navCtrl.navigateRoot(['/home'])
   }
+
+  openNotifications(){}
 
 }

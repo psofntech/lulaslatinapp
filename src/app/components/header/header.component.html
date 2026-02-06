@@ -14,22 +14,39 @@
     <!-- Acciones -->
     <ion-buttons slot="end">
 
+      <ion-button class="notification-button" (click)="openNotifications()">
+        @if(notificationsCount > 0){
+          <ion-badge
+            color="danger"
+            class="notification-badge"
+          >
+            {{ notificationsCount }}
+          </ion-badge>
+        }
+
+        <ion-icon slot="icon-only" name="notifications-outline"></ion-icon>
+      </ion-button>
+
       <!-- Cart -->
       <ion-button (click)="onCartClick()" class="cart-button">
-        <ion-badge
-          *ngIf="cartCount > 0"
-          color="danger"
-          mode="ios"
-          class="cart-badge"
-        >
-          {{ cartCount }}
-        </ion-badge>
+        @if(cartCount > 0){
+          <ion-badge
+            color="danger"
+            mode="ios"
+            class="cart-badge"
+          >
+            {{ cartCount }}
+          </ion-badge>
+        }
         <ion-icon slot="icon-only" name="cart-outline"></ion-icon>
       </ion-button>
 
       <!-- User trigger -->
       <ion-button (click)="openPopover($event)">
         <ion-icon slot="icon-only" name="person-outline"></ion-icon>
+        @if(isLoggedIn){
+          <span class="online-dot"></span>
+        }
       </ion-button>
 
     </ion-buttons>
@@ -40,12 +57,15 @@
 <ion-popover
   [event]="popoverEvent"
   [isOpen]="showPopover" 
-  (didDismiss)="onPopoverDismiss()"
+  (didDismiss)="showPopover = false"
   side="bottom"
   alignment="end"
   show-arrow="false"
 >
   <ng-template>
-    <app-user-popover [isLoggedIn]="isLoggedIn"></app-user-popover>
+    <app-user-popover 
+      [isLoggedIn]="isLoggedIn"
+      (close)="onPopoverDismiss()"
+    ></app-user-popover>
   </ng-template>
 </ion-popover>

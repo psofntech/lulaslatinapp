@@ -43,24 +43,32 @@
     <ion-card-content>
       <ion-grid>
        @for(address of addresses; track address.id) {
-        <ion-col size="12" size-md="6">
-          <ion-card class="address-card" (click)="editAddress(address)">
-            
-            <!-- Icono favorito en esquina superior derecha -->
-            @if(address.isFavorite){
-              <ion-icon name="star-outline" color="warning" class="favorite-icon"></ion-icon>
-            }
+          <ion-col size="12" size-md="6">
+            <ion-card class="address-card">
 
-            <!-- Contenido centrado -->
-            <ion-card-content class="address-content">
-              <div class="map-icon-wrapper">
-                <ion-icon name="map-outline"></ion-icon>
-              </div>
-              <span class="address-text">{{ address.street }}</span>
-            </ion-card-content>
+              <!-- Contenido centrado -->
+              <ion-card-content class="address-content" (click)="editAddress(address)">
+                <div class="map-icon-wrapper">
+                  <ion-icon name="map-outline"></ion-icon>
+                </div>
+                <span class="address-text">{{ address.street }}</span>
+              </ion-card-content>
 
-          </ion-card>
-        </ion-col>
+              <!-- Icono favorito en esquina superior derecha -->
+              <ion-button
+                fill="clear"
+                size="small"
+                class="favorite-button"
+                (click)="toggleFavorite(address); $event.stopPropagation()"
+              >
+                <ion-icon
+                  [name]="address.isFavorite ? 'star' : 'star-outline'"
+                  color="warning"
+                ></ion-icon>
+              </ion-button>
+
+            </ion-card>
+          </ion-col>
       }
 
         <!-- Add new address -->

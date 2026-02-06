@@ -126,5 +126,16 @@
     }
   }
 
+  .address-card {
+    position: relative;
+
+    .favorite-button {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      z-index: 10;
+    }
+  }
 
 }
+

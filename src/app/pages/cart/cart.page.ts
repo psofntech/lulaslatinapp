@@ -182,7 +182,6 @@ export class CartPage implements OnInit {
   async presentAddAddressAlert() {
     const alert = await this.alertController.create({
       header: 'Add Delivery Address',
-      mode: 'ios',
       inputs: [
         { name: 'street', type: 'text', placeholder: 'Street Address' },
         { name: 'city', type: 'text', placeholder: 'City' },
@@ -224,7 +223,6 @@ export class CartPage implements OnInit {
 
     const alert = await this.alertController.create({
       header: 'Select Delivery Address',
-      mode: 'ios',
       inputs: inputs,
       buttons: [
         { text: 'Cancel', role: 'cancel' },
@@ -261,7 +259,6 @@ export class CartPage implements OnInit {
   async editItem(item: CartItem) {
     const alert = await this.alertController.create({
       header: 'Editar Cantidad',
-      mode: 'ios',
       inputs: [
         {
           name: 'quantity',
@@ -296,7 +293,6 @@ export class CartPage implements OnInit {
       header: 'Eliminar Producto',
       subHeader: item.name,
       message: '¿Estás seguro de que deseas eliminar este item del pedido?',
-      mode: 'ios',
       buttons: [
         { text: 'Cancelar', role: 'cancel' },
         {

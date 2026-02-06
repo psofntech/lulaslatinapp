@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ModalController, ToastController } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonCard, IonCardContent, IonSegment, IonSegmentButton, IonIcon, IonButton } from '@ionic/angular/standalone';
+import { ModalController, ToastController, IonContent, IonCard, IonCardContent, IonSegment, IonSegmentButton, IonIcon, IonButton, IonGrid, IonCol, IonRow } from '@ionic/angular/standalone';
 import { HeaderComponent } from "src/app/components/header/header.component";
 import { MenuCategoryItem } from 'src/interfaces/menu-category.interface';
 import { Product } from '../../../interfaces/product.interface';
@@ -19,8 +18,8 @@ import { CartService } from 'src/app/services/cart';
   templateUrl: './products.page.html',
   styleUrls: ['./products.page.scss'],
   standalone: true,
-  imports: [IonContent, CommonModule, FormsModule, HeaderComponent, IonCard, IonCardContent, IonSegment, IonSegmentButton, IonIcon, IonButton],
-  providers: [ModalController, ToastController]
+  imports: [IonContent, CommonModule, FormsModule, HeaderComponent, IonCard, IonCardContent, IonSegment, IonSegmentButton, IonIcon, IonButton, IonGrid, IonCol, IonRow],
+  providers: [ToastController]
 })
 export class ProductsPage implements OnInit {
 
@@ -158,48 +157,30 @@ export class ProductsPage implements OnInit {
     return cat ? cat.lavel : '';
   }
 
-  async openModal(event: any, product: Product) {
-    event.stopPropagation();
+  async openModal(product: Product, ev: Event) {
+    ev.stopPropagation();
 
     if (!this.auth.isLoggedIn()) {
-
-      this.router.navigate(['/login'], {
-        queryParams: {
-          action: 'add-to-cart',
-          productId: product.id,
-          redirectTo: this.router.url
-        }
-      });
-
+      this.router.navigate(['/login']);
       return;
     }
 
     const modal = await this.modalController.create({
       component: ProductModalComponent,
-      componentProps: { product }
-    });
-
-    modal.onDidDismiss().then(res => {
-      if (res.data) {
-        this.cartService.add(
-          product,
-          res.data.quantity,
-          res.data.notes
-        );
-      }
+      componentProps: { product },
+      backdropDismiss: false
     });
 
     await modal.present();
 
-    const { data } = await modal.onWillDismiss();
+    const { data, role } = await modal.onDidDismiss();
 
-    if (data) {
-      // Aquí conectarías con tu servicio de carrito
-      console.log('Datos recibidos:', data);
-      this.showToast(`Agregados ${data.quantity} ${product.name}`);
+    if (role === 'confirm') {
+      this.cartService.add(product, data.quantity, data.notes);
+      this.showToast(`Agregado ${product.name}`);
     }
   }
-
+  
   async showToast(message: string) {
     const toast = await this.toastController.create({
       message: message,
