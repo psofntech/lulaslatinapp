@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth';
+import { map, take } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class AuthGuard implements CanActivate {
 
   constructor(
@@ -12,20 +11,16 @@ export class AuthGuard implements CanActivate {
     private router: Router
   ) {}
 
-  // ⚡ Guard ahora async
-  async canActivate(): Promise<boolean> {
-    try {
-      const loggedIn = await this.auth.isLoggedIn();
-      if (loggedIn) {
+  canActivate() {
+    return this.auth.getUser().pipe(
+      take(1),
+      map(user => {
+        if (!user) {
+          this.router.navigate(['/login']);
+          return false;
+        }
         return true;
-      } else {
-        this.router.navigate(['/login']);
-        return false;
-      }
-    } catch (e) {
-      console.error('Error checking login status', e);
-      this.router.navigate(['/login']);
-      return false;
-    }
+      })
+    );
   }
 }

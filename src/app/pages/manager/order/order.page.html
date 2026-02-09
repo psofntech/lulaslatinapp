@@ -1,0 +1,199 @@
+<ion-tabs #orderTabs>
+
+  <!-- TAB PENDIENTES -->
+  <ion-tab tab="pending">
+    <div id="pending-orders" class="ion-page">
+      <ion-header>
+        <ion-toolbar class="custom-orange">
+          <ion-title>Órdenes Pendientes</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <ion-refresher slot="fixed" (ionRefresh)="refreshOrders($event)">
+          <ion-refresher-content></ion-refresher-content>
+        </ion-refresher>
+
+        <ion-list>
+          <ng-container *ngIf="pendingOrders$ | async as pendingOrders; else emptyPending">
+            <ng-container *ngFor="let order of pendingOrders; trackBy: trackById">
+              <ion-card
+                (click)="openOrderDetail(order)"
+                [ngClass]="getOrderClasses(order)"
+              >
+                <ion-card-header>
+                  <ion-card-subtitle>#{{ order.id }} • {{ order.createdAt | date:'shortTime' }}</ion-card-subtitle>
+                  <ion-card-title>{{ order.customerName }}</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                  <p><strong>Total:</strong>
+                    ${{ getFinalTotal(order) | number:'1.2-2' }}
+                  </p>
+
+                  <ng-container *ngIf="now$ | async as now">
+                    <p class="elapsed-time">
+                      ⏱ {{ getMinutesElapsed(order) }} min en espera
+                    </p>
+
+                    <ion-chip *ngIf="isOrderDelayed(order)" color="danger">
+                      <ion-icon name="alert-circle" slot="start"></ion-icon>
+                      <ion-label>Retrasada</ion-label>
+                    </ion-chip>
+                  </ng-container>
+
+                  <ion-chip color="warning" outline>
+                    <ion-label>Nueva</ion-label>
+                  </ion-chip>
+                </ion-card-content>
+              </ion-card>
+            </ng-container>
+          </ng-container>
+
+          <ng-template #emptyPending>
+            <div class="empty-state">
+              <ion-icon name="cube-outline"></ion-icon>
+              <p>No hay órdenes pendientes</p>
+            </div>
+          </ng-template>
+        </ion-list>
+      </ion-content>
+    </div>
+  </ion-tab>
+
+  <!-- TAB COMPLETADAS -->
+  <ion-tab tab="completed">
+    <div id="completed-orders" class="ion-page">
+      <ion-header>
+        <ion-toolbar class="custom-orange">
+          <ion-title>Historial de Órdenes</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <ion-refresher slot="fixed" (ionRefresh)="refreshOrders($event)">
+          <ion-refresher-content></ion-refresher-content>
+        </ion-refresher>
+
+        <ion-list>
+          <ng-container *ngIf="completedOrders$ | async as completedOrders; else emptyCompleted">
+            <ng-container *ngFor="let order of completedOrders; trackBy: trackById">
+              <ion-card (click)="openOrderDetail(order)" [ngClass]="order.status">
+                <ion-card-header>
+                  <ion-card-subtitle>#{{ order.id }} • {{ order.createdAt | date:'shortTime' }}</ion-card-subtitle>
+                  <ion-card-title>{{ order.customerName }}</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                  <p><strong>Total:</strong> ${{ order.total | number:'1.2-2' }}</p>
+                  <ion-chip *ngIf="order.status==='completed'" color="success" outline>
+                    <ion-label>Lista</ion-label>
+                  </ion-chip>
+                  <ion-chip *ngIf="order.status==='cancelled'" color="danger" outline>
+                    <ion-icon name="close-circle"></ion-icon>
+                    <ion-label>Cancelada</ion-label>
+                  </ion-chip>
+                </ion-card-content>
+              </ion-card>
+            </ng-container>
+          </ng-container>
+
+          <ng-template #emptyCompleted>
+            <div class="empty-state">
+              <ion-icon name="cube-outline"></ion-icon>
+              <p>No hay órdenes completadas</p>
+            </div>
+          </ng-template>
+        </ion-list>
+      </ion-content>
+    </div>
+  </ion-tab>
+
+  <!-- TAB BAR -->
+  <ion-tab-bar slot="bottom">
+    <ion-tab-button tab="pending">
+      <ion-icon name="time-outline"></ion-icon>
+      <ion-label>Pendientes</ion-label>
+    </ion-tab-button>
+    <ion-tab-button tab="completed">
+      <ion-icon name="checkmark-done-outline"></ion-icon>
+      <ion-label>Historial</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
+
+</ion-tabs>
+
+<!-- MODAL DETALLES -->
+<ion-modal [isOpen]="isModalOpen" (willDismiss)="closeModal()">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar [style.--ion-color]=" 'var(--app-orange)' ">
+        <ion-title>Orden #{{ selectedOrder?.id }}</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="closeModal()">Cerrar</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+
+    <ng-container *ngIf="selectedOrder">
+      <ion-content class="ion-padding">
+        <div class="detail-header">
+          <ion-card>
+            <ion-card-content>
+
+              @if (selectedOrder.deliveryMethod === 'delivery') {
+                <p><strong>Cliente:</strong> {{ selectedOrder.customerName }}</p>
+                <p><strong>Teléfono:</strong> {{ selectedOrder.customerPhone }}</p>
+                <p><strong>Dirección:</strong> {{ selectedOrder.address }}</p>
+              } @else {
+                <p><strong>Cliente:</strong> {{ selectedOrder.customerName }}</p>
+                <p><strong>Teléfono:</strong> {{ selectedOrder.customerPhone }}</p>
+                <p><strong>Método:</strong> Pick-up</p>
+              }
+
+            </ion-card-content>
+          </ion-card>
+        </div>
+
+        <ion-list>
+          <ng-container *ngFor="let item of selectedOrder.items; trackBy: trackByItemId">
+            <ion-item>
+              <ion-label>
+                <h3>{{ item.quantity }}x {{ item.name }}</h3>
+                <p *ngIf="item.notes">Nota: {{ item.notes }}</p>
+              </ion-label>
+              <div slot="end" class="item-price">${{ item.price * item.quantity }}</div>
+            </ion-item>
+          </ng-container>
+        </ion-list>
+
+        <div class="total-row">
+          <div class="total-breakdown">
+            <p>Subtotal: ${{ getSubtotal(selectedOrder) | number:'1.2-2' }}</p>
+            <p>Tax: ${{ getTaxAmount(selectedOrder) | number:'1.2-2' }}</p>
+            <p>Tip: ${{ getTipAmount(selectedOrder) | number:'1.2-2' }}</p>
+
+            <hr />
+
+            <p class="final-total">
+              Total Final:
+              ${{ getFinalTotal(selectedOrder) | number:'1.2-2' }}
+            </p>
+          </div>
+        </div>
+      </ion-content>
+
+      <ion-footer>
+        <ion-toolbar>
+          <ion-button *ngIf="selectedOrder.status==='pending'" expand="block" color="success"
+                      (click)="markAsCompleted(selectedOrder.id)">
+            <ion-icon slot="start" name="checkmark-circle"></ion-icon>
+            Marcar como Atendida
+          </ion-button>
+
+          <p *ngIf="selectedOrder.status!=='pending'" class="status-message"
+             [class.success]="selectedOrder.status==='completed'"
+             [class.danger]="selectedOrder.status==='cancelled'">
+            {{ selectedOrder.status==='completed' ? 'Esta orden fue completada exitosamente.' : 'Esta orden fue cancelada.' }}
+          </p>
+        </ion-toolbar>
+      </ion-footer>
+    </ng-container>
+  </ng-template>
+</ion-modal>

@@ -1,6 +1,9 @@
 import { Routes } from '@angular/router';
 import { AuthGuard } from './guards/auth-guard';
 import { DashboardLayoutComponent } from './components/dashboard-layout/dashboard-layout.component';
+import { RoleGuard } from './guards/role.guards';
+import { RoleUser } from 'src/interfaces/auth.interfaces';
+import { NoAuthGuard } from './guards/no-auth.guard';
 
 export const routes: Routes = [
   {
@@ -32,19 +35,17 @@ export const routes: Routes = [
   },
   {
     path: 'login',
+    canActivate: [NoAuthGuard],
     loadComponent: () => import('./pages/auth/login/login.page').then( m => m.LoginPage)
   },
   {
     path: 'register',
+    canActivate: [NoAuthGuard],
     loadComponent: () => import('./pages/auth/register/register.page').then( m => m.RegisterPage)
   },
   {
-    path: 'admin/panel',
-    loadComponent: () => import('./pages/admin/panel/panel.page').then( m => m.PanelPage),
-    canActivate: [AuthGuard]
-  },
-  {
     path: 'reset-password',
+    canActivate: [NoAuthGuard],
     loadComponent: () => import('./pages/auth/reset-password/reset-password.page').then( m => m.ResetPasswordPage)
   },
   {
@@ -55,22 +56,57 @@ export const routes: Routes = [
   {
     path: 'dashboard',
     component: DashboardLayoutComponent,
+    canActivate: [AuthGuard],
     children: [
       {
         path: '',
-        loadComponent: () => import('./pages/client/panel/panel.page').then( m => m.PanelPage),
-        canActivate: [AuthGuard]
+        canActivateChild: [RoleGuard],
+        data: { roles: [RoleUser.customer] },
+        children: [
+          {
+            path: '',
+            loadComponent: () => import('./pages/client/panel/panel.page').then(m => m.PanelPage)
+          },
+          {
+            path: 'my-orders',
+            loadComponent: () => import('./pages/client/my-orders/my-orders.page').then(m => m.MyOrdersPage)
+          },
+          {
+            path: 'profile',
+            loadComponent: () => import('./pages/client/profile/profile.page').then(m => m.ProfilePage)
+          }
+        ]
       },
       {
-        path: 'my-orders',
-        loadComponent: () => import('./pages/client/my-orders/my-orders.page').then( m => m.MyOrdersPage),
-        canActivate: [AuthGuard]
+        path: 'manager',
+        canActivateChild: [RoleGuard],
+        data: { roles: [RoleUser.order_manager] },
+        children: [
+          {
+            path: '',
+            loadComponent: () => import('./pages/manager/panel/panel.page').then(m => m.PanelPage)
+          },
+          {
+            path: 'orders',
+            loadComponent: () => import('./pages/manager/order/order.page').then(m => m.OrderPage)
+          },
+          {
+            path: 'profile',
+            loadComponent: () => import('./pages/manager/profile/profile.page').then(m => m.ProfilePage)
+          }
+        ]
       },
       {
-        path: 'profile',
-        loadComponent: () => import('./pages/client/profile/profile.page').then( m => m.ProfilePage),
-        canActivate: [AuthGuard]
-      },
+        path: 'admin',
+        canActivateChild: [RoleGuard],
+        data: { roles: [RoleUser.admin]},
+        children: [
+          {
+            path: '',
+            loadComponent: () => import('./pages/admin/panel/panel.page').then( m => m.PanelPage),
+          }
+        ]
+      }
     ],
   },
 ];

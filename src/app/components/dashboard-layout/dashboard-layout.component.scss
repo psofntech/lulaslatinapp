@@ -124,3 +124,8 @@ ion-menu::part(container) {
     transform: scale(0.98);
   }
 }
+
+.click-disabled {
+  pointer-events: none;
+  opacity: 0.7;
+}

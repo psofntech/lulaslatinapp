@@ -1,0 +1,55 @@
+<ion-header>
+  <ion-toolbar color="dark">
+    <ion-title>Notifications</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()">
+        Close
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item *ngFor="let notif of notifications$ | async" [class.unread]="!notif.read">
+      <ion-label>
+        <h3>
+          {{ notif.type === 'order_created' ? '📦 ' : '⏰ ' }}
+          {{ notif.title }}
+        </h3>
+        <p>{{ notif.body }}</p>
+        <small>{{ notif.createdAt | date:'short' }}</small>
+
+        <!-- Order ID clickeable -->
+        <ng-container *ngIf="notif.data?.orderId">
+          <p>
+            Order ID:
+            <a (click)="goToOrder(notif.data.orderId)" class="order-link">
+              {{ notif.data.orderId }}
+            </a>
+          </p>
+        </ng-container>
+      </ion-label>
+
+      <!-- Botón para marcar notificación como leída -->
+      <ion-button fill="clear" slot="end" *ngIf="!notif.read" (click)="markRead(notif)">
+        Mark as read
+      </ion-button>
+    </ion-item>
+  </ion-list>
+
+  <div *ngIf="(notifications$ | async)?.length === 0" class="empty-state">
+    <p>No notifications</p>
+  </div>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button expand="block" (click)="markAllRead()">Mark all as read</ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button expand="block" color="danger" (click)="clearAll()">Clear all</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

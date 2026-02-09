@@ -9,49 +9,62 @@
 </ion-header>
 
 <!-- CONTENIDO -->
-<ion-content class="auth-content" [fullscreen]="true" keyboard-attach>
-
+ <ion-content [fullscreen]="true" class="auth-content">
   <div class="auth-container">
-
     <h2>Sign in to your account</h2>
 
-    <ion-item fill="outline">
-      <ion-label position="stacked">E-Mail Address</ion-label>
-      <ion-input 
-        type="email"
-        [(ngModel)]="email"
-        placeholder="Enter your email" 
-        enterkeyhint="next"
-        autocapitalize="off"
-        autocomplete="email"></ion-input>
-    </ion-item>
+    <form [formGroup]="form" (ngSubmit)="login()">
 
-    <ion-item fill="outline">
-      <ion-label position="stacked">Password</ion-label>
-      <ion-input type="password" placeholder="Enter your password" [(ngModel)]="password">
-        <ion-input-password-toggle slot="end" color="medium"></ion-input-password-toggle>
-      </ion-input>
-    </ion-item>
+      <ion-item fill="outline">
+        <ion-label position="stacked">E-Mail Address</ion-label>
+        <ion-input
+          type="email"
+          formControlName="email"
+          placeholder="Enter your email"
+          autocapitalize="off"
+          autocomplete="email">
+        </ion-input>
+      </ion-item>
+      @if(form.get('email')?.touched && form.get('email')?.invalid || submitted && form.get('email')?.invalid){
+        <ion-text color="danger">
+          @if(form.get('email')?.errors?.['required']){<small>Email is required.</small>}
+          @if(form.get('email')?.errors?.['email']){<small>Enter a valid email.</small>}
+        </ion-text>
+      }
 
+      <ion-item fill="outline">
+        <ion-label position="stacked">Password</ion-label>
+        <ion-input type="password" formControlName="password" placeholder="Enter your password">
+          <ion-input-password-toggle slot="end" color="medium"></ion-input-password-toggle>
+        </ion-input>
+      </ion-item>
+      @if(form.get('password')?.touched && form.get('password')?.invalid || submitted && form.get('password')?.invalid){
+        <ion-text color="danger">
+          @if(form.get('password')?.errors?.['required']){<small>Password is required.</small>}
+          @if(form.get('password')?.errors?.['minlength']){<small>Password must be at least 6 characters.</small>}
+          
+        </ion-text>
+      }
 
-    <ion-button expand="block" class="login-btn" color="light" (click)="login()">
-      <ion-icon name="log-in-outline" slot="start"></ion-icon>
-      Login
-    </ion-button>
+      <ion-button expand="block" color="light" type="submit" [disabled]="loading">
+        @if(loading){
+          <ion-spinner name="crescent"></ion-spinner>
+        } @else {
+          <ion-icon name="log-in-outline" slot="start"></ion-icon>
+        }
+        Login
+      </ion-button>
+
+    </form>
 
     <div class="auth-links">
       <ion-text>
         Don’t have an account?
-        <ion-router-link routerLink="/register">
-          Sign up.
-        </ion-router-link>
+        <ion-router-link routerLink="/register">Sign up.</ion-router-link>
       </ion-text>
-
       <ion-text>
         <ion-router-link routerLink="/reset-password">Forgot Your Password?</ion-router-link>
       </ion-text>
     </div>
-
   </div>
-
 </ion-content>

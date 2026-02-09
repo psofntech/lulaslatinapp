@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Preferences } from '@capacitor/preferences';
-import { AuthResponse, User } from 'src/interfaces/auth.interfaces';
+import { AuthResponse, RoleUser, User } from 'src/interfaces/auth.interfaces';
 
 const USERS_KEY = 'users_db';
 
@@ -12,6 +12,7 @@ export class AuthApiService {
   // ------------------------
 
   private async getUsers(): Promise<User[]> {
+    await this.seedUsers();
     const { value } = await Preferences.get({ key: USERS_KEY });
     return value ? JSON.parse(value) : [];
   }
@@ -45,7 +46,8 @@ export class AuthApiService {
       name: data.name,
       email: data.email,
       phone: data.phone,
-      password: data.password
+      password: data.password,
+      role: RoleUser.customer
     };
 
     users.push(user);
@@ -120,5 +122,41 @@ export class AuthApiService {
       email: user.email,
       exp: Date.now() + 1000 * 60 * 60
     }));
+  }
+
+  private async seedUsers() {
+    const { value } = await Preferences.get({ key: USERS_KEY });
+    if (value) return;
+
+    console.log('seedUsers');
+
+    const mockUsers: User[] = [
+      {
+        id: crypto.randomUUID(),
+        name: 'Cliente Demo',
+        email: 'customer@test.com',
+        password: '123456',
+        phone: '111111111',
+        role: RoleUser.customer
+      },
+      {
+        id: crypto.randomUUID(),
+        name: 'Admin Demo',
+        email: 'admin@test.com',
+        password: '123456',
+        phone: '222222222',
+        role: RoleUser.admin
+      },
+      {
+        id: crypto.randomUUID(),
+        name: 'Order Manager Demo',
+        email: 'manager@test.com',
+        password: '123456',
+        phone: '333333333',
+        role: RoleUser.order_manager
+      }
+    ];
+
+    await this.saveUsers(mockUsers);
   }
 }

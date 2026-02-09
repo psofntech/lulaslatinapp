@@ -15,7 +15,7 @@ const config: CapacitorConfig = {
       androidSpinnerStyle: 'large',
       spinnerColor: '#000000'
     }
-  }
+  },
 };
 
 export default config;
