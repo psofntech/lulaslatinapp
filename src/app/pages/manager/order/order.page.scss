@@ -1,0 +1,89 @@
+ion-card {
+  margin: 10px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  transition: transform 0.2s;
+
+  &:active { transform: scale(0.98); }
+
+  &.pending { border-left: 5px solid var(--ion-color-warning); }
+  &.completed {
+    border-left: 5px solid var(--ion-color-success);
+    background-color: #f0fff4;
+  }
+  &.cancelled {
+    border-left: 5px solid var(--ion-color-danger);
+    background-color: #fff5f5;
+    opacity: 0.6;
+
+    ion-card-title { text-decoration: line-through; color: var(--ion-color-medium); }
+  }
+}
+
+.status-message {
+  text-align: center;
+  font-weight: bold;
+  padding: 10px;
+
+  &.success { color: var(--ion-color-success); }
+  &.danger { color: var(--ion-color-danger); }
+}
+
+.item-price { font-weight: bold; }
+.empty-state { text-align: center; margin-top: 50px; color: var(--ion-color-medium); }
+.detail-header { text-align: center; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+.total-row { text-align: right; font-size: 1.2rem; color: var(--ion-color-primary); padding: 10px; }
+
+ion-toolbar.custom-orange {
+  --background: var(--app-orange);
+  color: #fff5f5;
+  height: fit-content;
+}
+
+ion-card.order-warning {
+  border-left: 5px solid #f4c430;
+  background-color: #fff9e6;
+}
+
+/* Retraso (15–25 min) */
+ion-card.order-delayed {
+  border-left: 5px solid #ff9800;
+  background-color: #fff3e0;
+}
+
+/* Crítica (+25 min) */
+ion-card.order-critical {
+  border-left: 5px solid #f44336;
+  background-color: #ffebee;
+  animation: pulse 1.5s infinite;
+}
+
+/* Tiempo visible */
+.order-time {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--ion-color-medium);
+}
+
+/* Animación sutil para críticas */
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 rgba(244, 67, 54, 0.4); }
+  50% { box-shadow: 0 0 10px rgba(244, 67, 54, 0.6); }
+  100% { box-shadow: 0 0 0 rgba(244, 67, 54, 0.4); }
+}
+
+
+.elapsed-time {
+  font-weight: 600;
+  color: var(--ion-color-danger);
+}
+
+.total-breakdown {
+  text-align: right;
+
+  .final-total {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--ion-color-success);
+  }
+}

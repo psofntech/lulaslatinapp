@@ -3,11 +3,16 @@ import { BehaviorSubject } from "rxjs";
 import { User } from "src/interfaces/auth.interfaces";
 import { AuthApiService } from "./auth-api";
 import { AuthStorageService } from "./auth-storage";
+import { map } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
 
   private user$ = new BehaviorSubject<User | null>(null);
+
+  get userValue(): User | null {
+    return this.user$.value;
+  }
 
   constructor(
     private api: AuthApiService,
@@ -31,10 +36,11 @@ export class AuthService {
     return await this.storage.isLoggedIn();
   }
 
-  async login(data: { email: string; password: string }) {
+  async login(data: { email: string; password: string }): Promise<User> {
     const response = await this.api.login(data);
     await this.storage.saveSession(response.token, response.user);
     this.user$.next(response.user);
+    return response.user;
   }
 
   async register(data: { name: string; email: string; password: string; phone: string }) {
@@ -65,5 +71,11 @@ export class AuthService {
   async logout() {
     await this.storage.clearSession();
     this.user$.next(null);
+  }
+
+  hasRole(...roles: string[]) {
+    return this.getUser().pipe(
+      map(user => !!user && roles.includes(user.role))
+    );
   }
 }

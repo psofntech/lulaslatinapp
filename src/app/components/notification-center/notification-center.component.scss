@@ -1,0 +1,15 @@
+.unread {
+  background-color: #fff3cd; // amarillo suave para no leídas
+}
+
+.empty-state {
+  text-align: center;
+  margin-top: 50px;
+  color: var(--ion-color-medium);
+}
+
+.order-link {
+  text-decoration: underline;
+  color: var(--ion-color-primary);
+  cursor: pointer;
+}
