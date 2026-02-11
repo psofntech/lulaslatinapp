@@ -29,6 +29,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   showPopover = false;
   popoverEvent: any;
 
+  authSub!: Subscription;
+
   cartCount: number = 0;  // reactivo
   private cartSub!: Subscription;
 
@@ -50,13 +52,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
     });
 
-    const authSub = this.authService.getUser().subscribe(user => {
+    this.authSub = this.authService.getUser().subscribe(user => {
       this.isLoggedIn = !!user; // true si hay usuario, false si es null
     });
   }
 
   ngOnDestroy() {
     this.cartSub.unsubscribe();
+    if (this.authSub) {
+      this.authSub.unsubscribe();
+    }
   }
 
   async onCartClick() {

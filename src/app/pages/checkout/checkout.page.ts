@@ -122,7 +122,7 @@ export class CheckoutPage implements OnInit {
   }
 
   calculateTax(subtotal: number): number {
-    return +(subtotal * 0.08).toFixed(2);
+    return +(subtotal * 0.06625).toFixed(2);
   }
 
   calculateTip(subtotal: number): number {

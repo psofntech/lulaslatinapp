@@ -2,10 +2,11 @@ import { Component } from '@angular/core';
 import { IonApp, IonRouterOutlet, Platform } from '@ionic/angular/standalone';
 import { StatusBar, Style } from '@capacitor/status-bar';
 import { SplashScreen } from '@capacitor/splash-screen';
-import { App as CapacitorApp } from '@capacitor/app';
-import { PushService } from 'src/app/services/push/push.service';
+import { Capacitor } from '@capacitor/core';
 import { PushNotifications } from '@capacitor/push-notifications';
-import { Capacitor, PluginListenerHandle } from '@capacitor/core';
+import { Preferences } from '@capacitor/preferences';
+import { PushService } from 'src/app/services/push/push.service';
+import { LocalNotifications } from '@capacitor/local-notifications';
 
 @Component({
   selector: 'app-root',
@@ -14,9 +15,6 @@ import { Capacitor, PluginListenerHandle } from '@capacitor/core';
 })
 export class AppComponent {
 
-  private appStateListener: PluginListenerHandle | null = null;
-  private pushInitialized = false;
-
   constructor(
     private platform: Platform,
     private pushService: PushService
@@ -24,55 +22,93 @@ export class AppComponent {
     this.initializeApp();
   }
 
-  async initializeApp() {
+  private async initializeApp() {
     await this.platform.ready();
 
-    // 🔹 Status bar segura
-    await this.setupSystemUI();
+    await this.handleFirstInstall();
 
-    // 🔹 Splash
-    setTimeout(() => SplashScreen.hide(), 800);
+    
+    setTimeout(async () => {
 
-    // 🔹 Inicializar Push de forma segura
-    this.waitForFirstActiveAndInitPush();
-  }
+      
+      await this.setupSystemUI();
 
-  private async waitForFirstActiveAndInitPush() {
-    if (!Capacitor.isNativePlatform()) return;
+      
+      await SplashScreen.hide();
 
-    this.appStateListener = await CapacitorApp.addListener(
-      'appStateChange',
-      async ({ isActive }) => {
-        if (isActive && !this.pushInitialized) {
-          this.pushInitialized = true;
-
-          // ✅ remover listener correctamente
-          await this.appStateListener?.remove();
-          this.appStateListener = null;
-
-          setTimeout(() => {
-            this.initPushSafely();
-          }, 600);
-        }
+      if (Capacitor.isNativePlatform()) {
+        await LocalNotifications.requestPermissions();
       }
-    );
+
+      
+      this.pushService.initWebSocket();
+
+      
+      if (Capacitor.isNativePlatform()) {
+        await this.initPushSafely();
+      }
+
+    }, 400);
   }
 
-  private async initPushSafely() {
+  // -------------------------------
+  // PRIMERA INSTALACIÓN
+  // -------------------------------
+  private async handleFirstInstall() {
+    const installed = await Preferences.get({ key: 'installed' });
+
+    if (!installed.value) {
+      await Preferences.clear();
+      await Preferences.set({ key: 'installed', value: 'true' });
+    }
+  }
+
+  // -------------------------------
+  // STATUS BAR / SYSTEM UI
+  // -------------------------------
+  private async setupSystemUI() {
     try {
-      this.registerPushListeners();
+      // NO overlay → Android reserva el espacio
+      await StatusBar.setOverlaysWebView({ overlay: false });
 
-      const perm = await PushNotifications.requestPermissions();
-      if (perm.receive !== 'granted') {
-        console.warn('Permisos de push denegados');
-        return;
-      }
+      // Fondo NEGRO
+      await StatusBar.setBackgroundColor({
+        color: '#000000',
+      });
 
-      await PushNotifications.register();
-      console.log('🔔 Push inicializado correctamente');
+      // Iconos BLANCOS
+      await StatusBar.setStyle({
+        style: Style.Light,
+      });
 
     } catch (err) {
-      console.error('Push init error', err);
+      console.warn('StatusBar error:', err);
+    }
+  }
+
+  // -------------------------------
+  // PUSH NOTIFICATIONS (ANDROID 13+ SAFE)
+  // -------------------------------
+  private async initPushSafely() {
+    try {
+      const permStatus = await PushNotifications.checkPermissions();
+      console.log('🔍 Push permission status:', permStatus);
+
+      if (permStatus.receive !== 'granted') {
+        const perm = await PushNotifications.requestPermissions();
+        if (perm.receive !== 'granted') {
+          console.warn('🚫 Push permission denied by user');
+          return;
+        }
+      }
+
+      this.registerPushListeners();
+      await PushNotifications.register();
+
+      console.log('🔔 Push initialized successfully');
+
+    } catch (err) {
+      console.error('❌ Push init error (no crash):', err);
     }
   }
 
@@ -83,7 +119,7 @@ export class AppComponent {
     });
 
     PushNotifications.addListener('registrationError', err => {
-      console.error('❌ Push registration error', err);
+      console.error('❌ Push registration error:', err);
     });
 
     PushNotifications.addListener('pushNotificationReceived', notif => {
@@ -100,26 +136,9 @@ export class AppComponent {
 
     PushNotifications.addListener('pushNotificationActionPerformed', action => {
       const orderId = action.notification.data?.orderId;
-      if (orderId) this.pushService.goToOrder(orderId);
+      if (orderId) {
+        this.pushService.goToOrder(orderId);
+      }
     });
-  }
-
-  // ============================
-  // 🎨 SYSTEM UI (STATUS + NAV)
-  // ============================
-  private async setupSystemUI() {
-    try {
-      await StatusBar.setOverlaysWebView({ overlay: false });
-      await StatusBar.setStyle({ style: Style.Light });
-      await StatusBar.setBackgroundColor({ color: '#000000' });
-    } catch {}
-
-    // Android Navigation Bar
-    const nav = (window as any).NavigationBar;
-    if (nav) {
-      nav.backgroundColorByHexString('#000000');
-      nav.setUp(true); // swipe up to show
-      nav.setHideNavigationBar(true);
-    }
   }
 }

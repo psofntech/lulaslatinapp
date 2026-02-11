@@ -62,7 +62,7 @@ export class RegisterPage implements OnInit {
     return this.router.navigate(['/home']);
   }
 
-  onSubmit() {
+  async onSubmit() {
     this.submitted = true;
     this.errorMessage = '';
 
@@ -71,7 +71,7 @@ export class RegisterPage implements OnInit {
     }
 
     try {
-      this.auth.register({
+      await this.auth.register({
         name: this.f['name'].value,
         email: this.f['email'].value,
         password: this.f['password'].value,

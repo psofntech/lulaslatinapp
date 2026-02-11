@@ -35,3 +35,12 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import '@ionic/angular/css/palettes/dark.system.css';
+
+ion-header,
+ion-toolbar {
+  --min-height: 56px;
+}
+
+ion-header ion-toolbar:first-child {
+  padding-top: 0 !important;
+}
