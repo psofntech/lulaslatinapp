@@ -6,8 +6,9 @@ import { NotificationStore } from 'src/app/stores/notification.store';
 import { AppNotification } from './push.interface';
 import { WebSocketService } from '../ws/websocket.service';
 import { v4 as uuid } from 'uuid';
-import { OrderService } from '../order'; // Importamos el servicio de ordenes
-import { AlertFeedbackService } from './alert.service'; // Usamos el servicio de audio
+import { OrderService } from '../order'; 
+import { AlertFeedbackService } from './alert.service'; 
+import { AuthStorageService } from '../auth-storage';
 
 @Injectable({ providedIn: 'root' })
 export class PushService {
@@ -18,8 +19,9 @@ export class PushService {
     private router: Router,
     private notificationStore: NotificationStore,
     private ws: WebSocketService,
-    private orderService: OrderService, // Inyección clave
-    private alertFeedback: AlertFeedbackService // Limpieza de código
+    private orderService: OrderService,
+    private alertFeedback: AlertFeedbackService,
+    private authStorage: AuthStorageService
   ) {
     this.registerInteraction();
   }
@@ -35,19 +37,66 @@ export class PushService {
     this.ws.stream$.subscribe(event => this.handleWsEvent(event));
   }
 
-  private handleWsEvent(event: any) {
-    if (event.type === 'order_created') {
+  private async handleWsEvent(event: any) {
+    const user = await this.authStorage.getUser();
+    const role = user?.role;
+
+    if (event.type === 'order_completed' && role === 'customer') {
       const order = event.data;
+
       const notification: AppNotification = {
         id: uuid(),
-        title: 'Nueva Orden',
-        body: `Orden #${order.id} recibida`,
-        type: 'order_created',
+        title: 'Order Completed',
+        body: `Your order #${order.id} is ready`,
+        type: event.type,
         data: { orderId: order.id },
         createdAt: new Date(),
         read: false
       };
-      this.handleIncomingPush(notification, order);
+
+      this.handleIncomingPush(notification);
+    }
+
+    if (role === 'order_manager' && ['order_created', 'order_canceled', 'order_delayed'].includes(event.type)) {
+      if (event.type === 'order_created') {
+        const order = event.data;
+        const notification: AppNotification = {
+          id: uuid(),
+          title: 'New Order',
+          body: `Order #${order.id} received`,
+          type: event.type,
+          data: { orderId: order.id },
+          createdAt: new Date(),
+          read: false
+        };
+        this.handleIncomingPush(notification, order);
+      }
+      if (event.type === 'order_canceled') {
+        const order = event.data;
+        const notification: AppNotification = {
+          id: uuid(),
+          title: 'Canceled Order',
+          body: `Order #${order.id} was cancelled`,
+          type: event.type,
+          data: { orderId: order.id },
+          createdAt: new Date(),
+          read: false
+        };
+        this.handleIncomingPush(notification, order);
+      }
+      if (event.type === 'order_delayed') {
+        const order = event.data;
+        const notification: AppNotification = {
+          id: uuid(),
+          title: 'Delayed Order',
+          body: `Order #${order.id} delayed`,
+          type: event.type,
+          data: { orderId: order.id },
+          createdAt: new Date(),
+          read: false
+        };
+        this.handleIncomingPush(notification, order);
+      }
     }
   }
 

@@ -74,6 +74,10 @@ export const routes: Routes = [
           {
             path: 'profile',
             loadComponent: () => import('./pages/client/profile/profile.page').then(m => m.ProfilePage)
+          },
+          {
+            path: 'my-orders/:id',
+            loadComponent: () => import('./pages/client/my-order-detail/my-order-detail.page').then( m => m.MyOrderDetailPage)
           }
         ]
       },
@@ -109,4 +113,5 @@ export const routes: Routes = [
       }
     ],
   },
+
 ];

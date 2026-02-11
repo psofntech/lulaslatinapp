@@ -5,5 +5,5 @@ export interface AppNotification {
   data?: any;
   createdAt: Date;
   read: boolean;
-  type: 'order_created' | 'order_delayed';
+  type: 'order_created' | 'order_delayed' | 'order_completed';
 }

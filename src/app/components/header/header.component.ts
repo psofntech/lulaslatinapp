@@ -3,14 +3,16 @@ import { Component, Input, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@
 import { AlertController, NavController } from '@ionic/angular';
 import { Router } from '@angular/router';
 
-import { IonHeader, IonToolbar, IonPopover , IonButtons, IonMenuButton, IonButton, IonIcon, IonBadge } from "@ionic/angular/standalone";
+import { IonHeader, IonToolbar, IonPopover , IonButtons, IonMenuButton, IonButton, IonIcon, IonBadge, ModalController } from "@ionic/angular/standalone";
 import { UserPopoverComponent } from '../user-popover/user-popover.component';
 
 import { addIcons } from 'ionicons';
 import { cartOutline, personOutline, notificationsOutline } from 'ionicons/icons';
-import { Subscription } from 'rxjs';
+import { map, Subscription } from 'rxjs';
 import { CartService } from 'src/app/services/cart';
 import { AuthService } from 'src/app/services/auth';
+import { NotificationStore } from 'src/app/stores/notification.store';
+import { NotificationCenterComponent } from '../notification-center/notification-center.component';
 
 @Component({
   selector: 'app-header',
@@ -33,15 +35,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   cartCount: number = 0;  // reactivo
   private cartSub!: Subscription;
-
-  notificationsCount: number = 0;
+  
+  unreadCount$ = this.notificationStore.notifications$.pipe(
+    map(n => n.filter(x => !x.read).length)
+  );
 
   constructor(
     private alertController: AlertController,
     private router: Router,
     private cartService: CartService,
     private navCtrl: NavController,
-    private authService: AuthService
+    private authService: AuthService,
+    private notificationStore: NotificationStore,
+    private modalCtrl: ModalController,
   ) { 
     addIcons({ cartOutline, personOutline, notificationsOutline });
   }
@@ -113,6 +119,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.navCtrl.navigateRoot(['/home'])
   }
 
-  openNotifications(){}
+  openNotifications() {
+      // Abrir modal con NotificationCenterComponent
+    this.modalCtrl.create({
+      component: NotificationCenterComponent
+    }).then(modal => modal.present());
+  }
 
 }

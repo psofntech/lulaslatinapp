@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Filter by Date</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close()">Close</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <ion-item>
+    <ion-label position="stacked">From</ion-label>
+    <ion-datetime
+      presentation="date"
+      [(ngModel)]="fromDate">
+    </ion-datetime>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="stacked">To</ion-label>
+    <ion-datetime
+      presentation="date"
+      [(ngModel)]="toDate">
+    </ion-datetime>
+  </ion-item>
+
+  <ion-button expand="block" (click)="apply()">
+    Apply filter
+  </ion-button>
+
+  <ion-button expand="block" fill="outline" (click)="clear()">
+    Clean
+  </ion-button>
+
+</ion-content>
