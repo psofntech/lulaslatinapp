@@ -1,0 +1,70 @@
+<ion-header>
+  <ion-toolbar>
+
+    <div slot="start" class="custom-back ion-padding" (click)="goBack()">
+      <ion-icon name="arrow-back-outline"></ion-icon>
+        <span>Back</span>
+      </div>
+
+    <ion-title>Order Details</ion-title>
+
+  </ion-toolbar>
+</ion-header>
+
+
+
+<ion-content *ngIf="order$ | async as order" class="ion-padding">
+
+
+  <ion-card class="order-summary-card">
+
+    <div class="summary-header">
+      <div>
+        <h2>Order #{{ order.id }}</h2>
+        <span
+          class="status"
+          [class.pending]="order.status === 'pending'"
+          [class.completed]="order.status === 'completed'"
+          [class.cancelled]="order.status === 'cancelled'">
+          {{ order.status }}
+        </span>
+      </div>
+    </div>
+
+  </ion-card>
+
+  <div class="items-section">
+
+    <h3 class="section-title">Items</h3>
+
+    <ion-card
+      class="item-card"
+      *ngFor="let item of order.items">
+
+      <div class="item-row">
+
+        <div class="item-info">
+          <h4>{{ item.name }}</h4>
+          <p>Cantidad: {{ item.quantity }}</p>
+        </div>
+
+        <div class="item-price">
+          {{ (item.price * item.quantity) | currency }}
+        </div>
+
+      </div>
+
+    </ion-card>
+
+  </div>
+
+  <ion-card class="total-card">
+
+    <div class="total-row">
+      <span>Total paid</span>
+      <strong>{{ order.total | currency }}</strong>
+    </div>
+
+  </ion-card>
+
+</ion-content>

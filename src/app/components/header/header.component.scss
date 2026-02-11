@@ -4,7 +4,7 @@
   margin-left: 10px;
 }
 
-.cart-button {
+.cart-button, .notification-button {
   position: relative;
   width: 3rem;
   display: flex;
@@ -12,7 +12,7 @@
   justify-content: center;
 }
 
-.cart-badge {
+.cart-badge, .alert-badge {
   position: absolute;
   left: -10px;        // izquierda del icono
   top: 50%;

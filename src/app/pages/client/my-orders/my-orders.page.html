@@ -1,7 +1,158 @@
-<ion-content >
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">my-orders</ion-title>
-    </ion-toolbar>
-  </ion-header>
+
+
+<ion-content>
+
+  <div class="summary-box active-summary"
+       *ngIf="activeOrders$ | async as activeOrders">
+
+    <div class="summary-row">
+      <div>
+        <h3>Active Orders</h3>
+        <p>{{ activeOrders.length }} in process</p>
+      </div>
+    </div>
+
+  </div>
+
+  <ion-list>
+
+    <ion-card *ngFor="let order of activeOrders$ | async">
+
+      <ion-label>
+        <h2>Order #{{ order.id }}</h2>
+        <p class="status pending">Pending</p>
+
+        <!-- Countdown -->
+        <div class="timer-wrapper">
+
+          <div class="circle-container">
+
+            <svg class="progress-ring" width="80" height="80">
+              <circle
+                class="progress-ring-bg"
+                stroke-width="6"
+                fill="transparent"
+                r="32"
+                cx="40"
+                cy="40"
+              />
+
+              <circle
+                class="progress-ring-circle"
+                [class.danger]="getRemainingSeconds(order) <= 120"
+                stroke-width="6"
+                fill="transparent"
+                r="32"
+                cx="40"
+                cy="40"
+                [attr.stroke-dasharray]="CIRCUMFERENCE"
+                [attr.stroke-dashoffset]="getStrokeDashoffset(order)"
+              />
+            </svg>
+
+            <div
+              class="timer-text"
+              [class.danger]="getRemainingSeconds(order) <= 120">
+              {{ formatTime(getRemainingSeconds(order)) }}
+            </div>
+
+          </div>
+
+          <div *ngIf="!canCancel(order)" class="expired-text">
+            Cancellation time expired
+          </div>
+
+        </div>
+
+      </ion-label>
+
+      <div class="card-actions">
+        <ion-button
+          fill="outline"
+          (click)="goOrderDetails(order.id)">
+            See details
+          </ion-button>
+
+        <ion-button
+          color="danger"
+          *ngIf="canCancel(order)"
+          (click)="cancelOrder(order.id)">
+          Cancel
+        </ion-button>
+      </div>
+
+    </ion-card>
+
+  </ion-list>
+
+
+  <div class="section-divider"></div>
+
+
+
+  <div class="summary-box history-summary"
+       *ngIf="totalFilteredAmount$ | async as total">
+
+    <div>
+      <h3>Order History</h3>
+      <p>Total spent</p>
+      <strong>{{ total | currency }}</strong>
+    </div>
+
+  </div>
+
+  <ion-button
+    fill="outline"
+    size="small"
+    expand="block"
+    class="filter-button"
+    (click)="openDateFilter()">
+
+    📅 Filter by date
+
+  </ion-button>
+
+  <ng-container *ngFor="let group of groupedHistory$ | async">
+
+    <!-- Encabezado por mes -->
+    <div class="month-header">
+      <h3>{{ group.monthLabel }}</h3>
+      <span>Total: {{ group.total | currency }}</span>
+    </div>
+
+    <ion-list>
+
+      <ion-card *ngFor="let order of group.orders">
+
+        <ion-label>
+          <h2>Order #{{ order.id }}</h2>
+
+          <p
+            class="status"
+            [class.completed]="order.status === 'completed'"
+            [class.cancelled]="order.status === 'cancelled'">
+
+            {{ order.status }}
+
+          </p>
+
+          <p class="date">
+            {{ order.createdAt | date:'medium' }}
+          </p>
+
+        </ion-label>
+
+        <ion-button
+          fill="outline"
+          expand="block"
+          (click)="goOrderDetails(order.id)">
+          See details
+        </ion-button>
+
+      </ion-card>
+
+    </ion-list>
+
+  </ng-container>
+
 </ion-content>

@@ -15,15 +15,9 @@
     <ion-buttons slot="end">
 
       <ion-button class="notification-button" (click)="openNotifications()">
-        @if(notificationsCount > 0){
-          <ion-badge
-            color="danger"
-            class="notification-badge"
-          >
-            {{ notificationsCount }}
-          </ion-badge>
-        }
-
+        <ion-badge *ngIf="unreadCount$ | async as count" color="danger"  class="alert-badge"  mode="ios">
+          {{ count }}
+        </ion-badge>
         <ion-icon slot="icon-only" name="notifications-outline"></ion-icon>
       </ion-button>
 

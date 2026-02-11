@@ -46,7 +46,7 @@ export class OrderService {
         items: [
           { id: '2', name: 'Tacos', quantity: 3, price: 4.5 }
         ],
-        total: 0
+        total: 13.5
       },
       {
         id: 'ORD-003',
@@ -60,7 +60,7 @@ export class OrderService {
         items: [
           { id: '3', name: 'Burrito', quantity: 1, price: 11.5 }
         ],
-        total: 0
+        total: 11.5
       }
     ];
     this.ordersSubject.next(mockOrders);
