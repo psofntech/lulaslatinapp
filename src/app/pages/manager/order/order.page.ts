@@ -13,7 +13,7 @@ import { RefresherCustomEvent } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { addIcons } from 'ionicons';
-import { timeOutline, checkmarkDoneOutline, closeCircleOutline, cubeOutline } from 'ionicons/icons';
+import { timeOutline, checkmarkDoneOutline, closeCircleOutline, cubeOutline, flash } from 'ionicons/icons';
 
 import { interval } from 'rxjs';
 import { startWith } from 'rxjs/operators';
@@ -61,7 +61,7 @@ export class OrderPage implements OnInit {
     private orderService: OrderService,
     private alertFeedback: AlertFeedbackService
   ) {
-    addIcons({ timeOutline, checkmarkDoneOutline, closeCircleOutline, cubeOutline });
+    addIcons({ timeOutline, checkmarkDoneOutline, closeCircleOutline, cubeOutline, flash });
   }
 
   async ngOnInit() {
@@ -92,8 +92,6 @@ export class OrderPage implements OnInit {
         )
       )
     );
-
-    interval(60000).subscribe();
   }
 
   getMinutesElapsed(order: Order): number {
@@ -149,7 +147,7 @@ export class OrderPage implements OnInit {
       case '20':
         return subtotal * 0.20;
       case 'custom':
-        return order.cutomYipAmount ?? 0;
+        return order.cutomTipAmount ?? 0;
       default:
         return 0;
     }
@@ -193,11 +191,11 @@ export class OrderPage implements OnInit {
 
   getOrderClasses(order: Order): string[] {
     const classes: string[] = [order.status];
+    
+    if (this.isNewOrder(order)) classes.push('new-order-entry');
 
     const timeClass = this.getOrderTimeClass(order);
-    if (timeClass) {
-      classes.push(timeClass);
-    }
+    if (timeClass) classes.push(timeClass);
 
     return classes;
   }
@@ -221,5 +219,9 @@ export class OrderPage implements OnInit {
     this.alertFeedback.vibrate(); 
 
     console.warn(`🚨 Orden crítica: ${order.id}`);
+  }
+
+  isNewOrder(order: Order): boolean {
+    return (Date.now() - new Date(order.createdAt).getTime()) < 10000; // Menos de 10 seg
   }
 }

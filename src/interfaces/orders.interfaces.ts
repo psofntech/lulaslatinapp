@@ -16,6 +16,6 @@ export interface Order {
   total: number;
   createdAt: Date;
   tipType?: '15' | '18' | '20' | 'custom'; // se usa para el calculo de porcentajes de propina con el subtotal de la orden
-  cutomYipAmount?: number; // usado solo cuando el cliente selecciona esta opcion al crear su roden
+  cutomTipAmount?: number; // usado solo cuando el cliente selecciona esta opcion al crear su roden
   items: OrderItem[];
 }

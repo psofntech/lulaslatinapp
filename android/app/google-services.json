@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "914979549066",
+    "project_id": "lulaslatincusine",
+    "storage_bucket": "lulaslatincusine.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:914979549066:android:b402c105e568024c54a273",
+        "android_client_info": {
+          "package_name": "com.psofntech.latinCusineApp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBb1luLVtDTK2InvpkrakE2uey9uwvD0s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

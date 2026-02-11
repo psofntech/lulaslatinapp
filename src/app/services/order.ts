@@ -42,7 +42,7 @@ export class OrderService {
         status: 'pending',
         createdAt: new Date(Date.now() - 24 * 60000), // hace 18 min
         tipType: 'custom',
-        cutomYipAmount: 5,
+        cutomTipAmount: 5,
         items: [
           { id: '2', name: 'Tacos', quantity: 3, price: 4.5 }
         ],
@@ -68,7 +68,6 @@ export class OrderService {
 
   // Marcar como atendida
   updateOrderStatus(orderId: string, status: 'completed' | 'cancelled'): Observable<any> {
-    // Lógica de API real aquí
     // return this.http.patch(`api/orders/${orderId}`, { status });
     
     // Simulación local:
@@ -79,5 +78,13 @@ export class OrderService {
       this.ordersSubject.next([...currentOrders]); // Dispara actualización en UI
     }
     return of({ success: true });
+  }
+
+  public addNewOrderFromSocket(order: Order) {
+    const currentOrders = this.ordersSubject.value;
+    // Prevenir duplicados por si el socket envía el evento dos veces
+    if (currentOrders.some(o => o.id === order.id)) return;
+
+    this.ordersSubject.next([order, ...currentOrders]);
   }
 }

@@ -1,5 +1,5 @@
 export interface MenuCategoryItem {
-    lavel: string,
+    label: string,
     iconName: string,
     categoryId: string
 }

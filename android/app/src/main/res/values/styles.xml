@@ -16,7 +16,23 @@
     </style>
 
 
-    <style name="AppTheme.NoActionBarLaunch" parent="Theme.SplashScreen">
-        <item name="android:background">@drawable/splash</item>
-    </style>
+  <style name="AppTheme.NoActionBarLaunch" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+
+      <!-- Android maneja las barras -->
+      <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+
+      <!-- STATUS BAR -->
+      <item name="android:statusBarColor">@android:color/black</item>
+      <item name="android:windowLightStatusBar">false</item>
+
+      <!-- NAVIGATION BAR -->
+      <item name="android:navigationBarColor">@android:color/black</item>
+      <item name="android:windowLightNavigationBar">false</item>
+
+      <!-- MUY IMPORTANTE: sin translucidez -->
+      <item name="android:windowTranslucentStatus">false</item>
+      <item name="android:windowTranslucentNavigation">false</item>
+
+  </style>
+
 </resources>

@@ -40,8 +40,9 @@
                     </ion-chip>
                   </ng-container>
 
-                  <ion-chip color="warning" outline>
-                    <ion-label>Nueva</ion-label>
+                  <ion-chip *ngIf="isNewOrder(order)" color="warning" outline>
+                    <ion-icon name="flash" slot="start"></ion-icon>
+                    <ion-label>NUEVA</ion-label>
                   </ion-chip>
                 </ion-card-content>
               </ion-card>

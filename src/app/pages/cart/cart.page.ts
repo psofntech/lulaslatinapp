@@ -359,32 +359,4 @@ export class CartPage implements OnInit {
     this.navCtrl.navigateForward('/checkout')
   }
 
-  private saveCheckoutState() {
-    const state: CheckoutState = {
-      selectType: this.selectType,
-      tipType: this.selectedTipType,
-      customTipAmount: this.customTipAmount,
-      isSkipped: this.isSkipped
-    };
-
-    localStorage.setItem(CHECKOUT_STATE_KEY, JSON.stringify(state));
-  }
-
-  private loadCheckoutState() {
-    const raw = localStorage.getItem(CHECKOUT_STATE_KEY);
-    if (!raw) return;
-
-    const state: CheckoutState = JSON.parse(raw);
-
-    this.selectType = state.selectType ?? 'pickup';
-    this.selectedTipType = state.tipType;
-    this.customTipAmount = state.customTipAmount;
-    this.isSkipped = state.isSkipped ?? false;
-
-    // Recalcular delivery fee si aplica
-    this.deliveryFee = this.selectType === 'delivery' ? 5.00 : 0;
-  }
-
-  
-
 }

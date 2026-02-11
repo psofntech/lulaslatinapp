@@ -1,7 +1,7 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.lulaslatincusine.orderapps',
+  appId: 'com.psofntech.latinCusineApp',
   appName: 'latinCusineApp',
   webDir: 'www',
   plugins: {

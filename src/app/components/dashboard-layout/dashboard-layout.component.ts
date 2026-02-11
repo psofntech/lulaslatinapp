@@ -3,7 +3,6 @@ import { Router, NavigationEnd, RouterOutlet } from '@angular/router';
 import { filter, map, Subscription } from 'rxjs';
 import {
   NavController, 
-  IonApp,
   IonContent,
   IonHeader,
   IonMenu,
@@ -45,7 +44,6 @@ interface MenuItem {
   standalone: true,
   imports: [
     CommonModule,
-    IonApp,
     IonContent,
     IonHeader,
     IonMenu,
