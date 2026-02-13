@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  wsUrl: 'wss://dreamlike-esme-loonily.ngrok-free.dev'
 };
