@@ -4,6 +4,7 @@ import { User } from "src/interfaces/auth.interfaces";
 import { AuthApiService } from "./auth-api";
 import { AuthStorageService } from "./auth-storage";
 import { map } from 'rxjs';
+import { WebSocketService } from "./ws/websocket.service";
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -16,7 +17,8 @@ export class AuthService {
 
   constructor(
     private api: AuthApiService,
-    private storage: AuthStorageService
+    private storage: AuthStorageService,
+    private webSocketService: WebSocketService
   ) {
     this.restoreSession();
   }
@@ -69,6 +71,7 @@ export class AuthService {
   }
 
   async logout() {
+    this.webSocketService.disconnect();
     await this.storage.clearSession();
     this.user$.next(null);
   }
